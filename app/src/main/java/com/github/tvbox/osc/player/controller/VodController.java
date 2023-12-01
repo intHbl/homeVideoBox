@@ -920,7 +920,8 @@ public class VodController extends BaseController {
                 // 进度条
                 mBottomRoot2.setVisibility(VISIBLE);
                 // 时钟 下载速度
-                mTopRoot2.setVisibility(GONE);
+                mTopRoot1.setVisibility(VISIBLE);
+                mTopRoot2.setVisibility(VISIBLE);
                 // 标题
                 mPlayTitle.setVisibility(VISIBLE);
                 break;
