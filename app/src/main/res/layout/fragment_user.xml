@@ -21,6 +21,7 @@
 
             <LinearLayout
                 android:id="@+id/tvHistory"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/vs_100"
                 android:layout_gravity="center"
@@ -77,8 +78,8 @@
 
 
                 <ImageView
-                    android:layout_width="@dimen/vs_50"
-                    android:layout_height="@dimen/vs_50"
+                    android:layout_width="@dimen/vs_60"
+                    android:layout_height="@dimen/vs_60"
                     android:layout_gravity="center"
                     android:alpha="0.75"
                     android:src="@drawable/icon_live" />
@@ -95,6 +96,19 @@
                     android:textAlignment="gravity"
                     android:textColor="@color/color_CCFFFFFF"
                     android:textSize="@dimen/ts_40" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/vs_1"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center"
+                    android:text="Live"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/color_CC0889b8"
+                    android:textSize="@dimen/ts_20" />
 
             </LinearLayout>
 
