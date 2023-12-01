@@ -83,7 +83,7 @@ public class VodController extends BaseController {
                     }
                     case 1003: { // 隐藏底部菜单
                         mBottomRoot.setVisibility(GONE);
-                        mTopRoot1.setVisibility(GONE);
+                        // mTopRoot1.setVisibility(GONE);
                         // mTopRoot2.setVisibility(GONE);
                         backBtn.setVisibility(INVISIBLE);
 
@@ -914,8 +914,10 @@ public class VodController extends BaseController {
             case VideoView.STATE_PLAYING:
                 initLandscapePortraitBtnInfo();
                 startProgress();
+                mVideoSize.setVisibility(GONE);
                 break;
             case VideoView.STATE_PAUSED:
+                mVideoSize.setVisibility(VISIBLE);
                 // mTopRoot1.setVisibility(GONE);
                 // mTopRoot2.setVisibility(GONE);
                 // mPlayTitle.setVisibility(VISIBLE);
@@ -938,8 +940,8 @@ public class VodController extends BaseController {
                 // 时钟 下载速度
                 mTopRoot2.setVisibility(VISIBLE);
                 // 标题
+                mTopRoot1.setVisibility(VISIBLE);
                 mPlayTitle.setVisibility(VISIBLE);
-                mTopRoot2.setVisibility(VISIBLE);
                 if(mProgressRoot.getVisibility()==GONE)mPlayLoadNetSpeed.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PLAYBACK_COMPLETED:
