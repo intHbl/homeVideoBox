@@ -835,7 +835,7 @@ public class PlayFragment extends BaseLazyFragment {
         }else {
             mVodInfo.playIndex++;
         }
-        play(false);
+        play(true);
     }
 
     private void playPrevious() {
