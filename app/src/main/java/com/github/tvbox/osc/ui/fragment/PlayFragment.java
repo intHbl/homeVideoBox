@@ -256,6 +256,7 @@ public class PlayFragment extends BaseLazyFragment {
 
             @Override
             public void prepared() {
+                initAudioTrack();
                 initSubtitleView();
             }
         });
@@ -586,7 +587,7 @@ public class PlayFragment extends BaseLazyFragment {
         if (subtitlePathCache != null && !subtitlePathCache.isEmpty()) {
             mController.mSubtitleView.setSubtitlePath(subtitlePathCache);
         } else {
-            if (playSubtitle != null && playSubtitle .length() > 0) {
+            if (playSubtitle != null && playSubtitle.length() > 0) {
                 mController.mSubtitleView.setSubtitlePath(playSubtitle);
             } else {
                 if (mController.mSubtitleView.hasInternal) {
@@ -608,6 +609,17 @@ public class PlayFragment extends BaseLazyFragment {
                         if(!hasCh)((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(subtitleTrackList.get(0).index);
                     }
                 }
+            }
+        }
+    }
+
+    // XXTODO  
+    private void initAudioTrack() {
+        TrackInfo trackInfo = null;
+        if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer) {
+            trackInfo = ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).getTrackInfo();
+            if (trackInfo != null && trackInfo.getAudio().size() > 0) {
+                ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(trackInfo.getAudio().get(0).index);
             }
         }
     }

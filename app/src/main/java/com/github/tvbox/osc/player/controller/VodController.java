@@ -68,6 +68,7 @@ public class VodController extends BaseController {
                     }
                     case 1002: { // 显示底部菜单
                         mBottomRoot2.setVisibility(VISIBLE);
+                        mTopRoot1.setVisibility(VISIBLE);
                         //mBottomRoot2.setVisibility(GONE);
 
                         // mBottomRoot.setVisibility(VISIBLE);
