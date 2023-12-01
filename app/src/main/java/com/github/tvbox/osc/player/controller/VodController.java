@@ -877,7 +877,7 @@ public class VodController extends BaseController {
         simSlideOffset += (10000.0f * dir);
         int currentPosition = (int) mControlWrapper.getCurrentPosition();
         int position = (int) (simSlideOffset + currentPosition);
-        if (position > duration) position = duration;
+        if (position > duration-5) position = duration-5;
         if (position < 0) position = 0;
         updateSeekUI(currentPosition, position, duration);
         simSeekPosition = position;
@@ -885,10 +885,6 @@ public class VodController extends BaseController {
 
     @Override
     protected void updateSeekUI(int curr, int seekTo, int duration) {
-        // 单位应该是 秒
-        if(seekTo>=duration){
-            seekTo=duration-2;
-        }
         super.updateSeekUI(curr, seekTo, duration);
         if (seekTo > curr) {
             mProgressIcon.setImageResource(R.drawable.icon_pre);
@@ -917,18 +913,11 @@ public class VodController extends BaseController {
             case VideoView.STATE_PLAYING:
                 initLandscapePortraitBtnInfo();
                 startProgress();
-                // 进度条
-                mBottomRoot2.setVisibility(VISIBLE);
-                // 时钟 下载速度
-                mTopRoot1.setVisibility(VISIBLE);
-                mTopRoot2.setVisibility(VISIBLE);
-                // 标题
-                mPlayTitle.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PAUSED:
                 // mTopRoot1.setVisibility(GONE);
                 // mTopRoot2.setVisibility(GONE);
-                mPlayTitle.setVisibility(VISIBLE);
+                // mPlayTitle.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_ERROR:
                 listener.errReplay();
@@ -943,9 +932,17 @@ public class VodController extends BaseController {
                 break;
             case VideoView.STATE_PREPARING:
             case VideoView.STATE_BUFFERING:
+                // 进度条
+                mBottomRoot2.setVisibility(VISIBLE);
+                // 时钟 下载速度
+                mTopRoot2.setVisibility(VISIBLE);
+                // 标题
+                mPlayTitle.setVisibility(VISIBLE);
+                mTopRoot2.setVisibility(VISIBLE);
                 if(mProgressRoot.getVisibility()==GONE)mPlayLoadNetSpeed.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PLAYBACK_COMPLETED:
+                // playNext(reset=true)
                 listener.playNext(true);
                 break;
         }
