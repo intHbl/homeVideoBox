@@ -885,6 +885,10 @@ public class VodController extends BaseController {
 
     @Override
     protected void updateSeekUI(int curr, int seekTo, int duration) {
+        // 单位应该是 秒
+        if(seekTo>=duration){
+            seekTo=duration-2;
+        }
         super.updateSeekUI(curr, seekTo, duration);
         if (seekTo > curr) {
             mProgressIcon.setImageResource(R.drawable.icon_pre);
@@ -916,11 +920,13 @@ public class VodController extends BaseController {
                 // 进度条
                 mBottomRoot2.setVisibility(VISIBLE);
                 // 时钟 下载速度
-                mTopRoot2.setVisibility(VISIBLE);
+                mTopRoot2.setVisibility(GONE);
+                // 标题
+                mPlayTitle.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PAUSED:
-                mTopRoot1.setVisibility(GONE);
-                mTopRoot2.setVisibility(GONE);
+                // mTopRoot1.setVisibility(GONE);
+                // mTopRoot2.setVisibility(GONE);
                 mPlayTitle.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_ERROR:

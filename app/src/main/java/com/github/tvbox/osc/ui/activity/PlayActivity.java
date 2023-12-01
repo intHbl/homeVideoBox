@@ -804,7 +804,8 @@ public class PlayActivity extends BaseActivity {
         }else {
             mVodInfo.playIndex++;
         }
-        play(false);
+        // true => reset
+        play(true);
     }
 
     private void playPrevious() {
