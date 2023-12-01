@@ -67,23 +67,29 @@ public class VodController extends BaseController {
                         break;
                     }
                     case 1002: { // 显示底部菜单
-                        mBottomRoot.setVisibility(VISIBLE);
-                        mTopRoot1.setVisibility(VISIBLE);
-                        mTopRoot2.setVisibility(VISIBLE);
-                        mPlayTitle.setVisibility(GONE);
-                        mNextBtn.requestFocus();
-                        backBtn.setVisibility(ScreenUtils.isTv(context) ? INVISIBLE : VISIBLE);
-                        showLockView();
+                        mBottomRoot2.setVisibility(VISIBLE);
+                        //mBottomRoot2.setVisibility(GONE);
+
+                        // mBottomRoot.setVisibility(VISIBLE);
+                        // mTopRoot1.setVisibility(VISIBLE);
+                        // mTopRoot2.setVisibility(VISIBLE);
+
+                        //mPlayTitle.setVisibility(GONE);
+                        //mNextBtn.requestFocus();
+                        //backBtn.setVisibility(ScreenUtils.isTv(context) ? INVISIBLE : VISIBLE);
+                        //showLockView();
                         break;
                     }
                     case 1003: { // 隐藏底部菜单
                         mBottomRoot.setVisibility(GONE);
                         mTopRoot1.setVisibility(GONE);
-                        mTopRoot2.setVisibility(GONE);
+                        // mTopRoot2.setVisibility(GONE);
                         backBtn.setVisibility(INVISIBLE);
+
+                        mBottomRoot2.setVisibility(VISIBLE);
                         break;
                     }
-                    case 1004: { // 设置速度
+                    case 1004: { // 设置速度 
                         if (isInPlaybackState()) {
                             try {
                                 float speed = (float) mPlayerConfig.getDouble("sp");
@@ -101,14 +107,18 @@ public class VodController extends BaseController {
     }
 
     SeekBar mSeekBar;
+    SeekBar mSeekBar2;
     TextView mCurrentTime;
+    TextView mCurrentTime2;
     TextView mTotalTime;
+    TextView mTotalTime2;
     boolean mIsDragging;
     LinearLayout mProgressRoot;
     TextView mProgressText;
     ImageView mProgressIcon;
     ImageView mLockView;
     LinearLayout mBottomRoot;
+    LinearLayout mBottomRoot2;
     LinearLayout mTopRoot1;
     LinearLayout mTopRoot2;
     LinearLayout mParseRoot;
@@ -173,6 +183,12 @@ public class VodController extends BaseController {
     protected void initView() {
         super.initView();
         mCurrentTime = findViewById(R.id.curr_time);
+        //XXTODO
+        mCurrentTime2 = findViewById(R.id.curr_time2);
+        mTotalTime2 = findViewById(R.id.total_time2);
+        mSeekBar2 = findViewById(R.id.seekBar2);
+        mBottomRoot2 = findViewById(R.id.bottom_container2);
+
         mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
         mPlayTitle1 = findViewById(R.id.tv_info_name1);
@@ -311,318 +327,354 @@ public class VodController extends BaseController {
                 mControlWrapper.startFadeOut();
             }
         });
+
+        mSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!fromUser) {
+                    return;
+                }
+
+                long duration = mControlWrapper.getDuration();
+                long newPosition = (duration * progress) / seekBar.getMax();
+
+                if (mCurrentTime2 != null)
+                    mCurrentTime2.setText(stringForTime((int) newPosition));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mIsDragging = true;
+                mControlWrapper.stopProgress();
+                mControlWrapper.stopFadeOut();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                myHandle.removeCallbacks(myRunnable);
+                myHandle.postDelayed(myRunnable, myHandleSeconds);
+                long duration = mControlWrapper.getDuration();
+                long newPosition = (duration * seekBar.getProgress()) / seekBar.getMax();
+                mControlWrapper.seekTo((int) newPosition);
+                mIsDragging = false;
+                mControlWrapper.startProgress();
+                mControlWrapper.startFadeOut();
+            }
+        });
+
         mPlayerRetry.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.replay(true);
+                //listener.replay(true);
                 hideBottom();
             }
         });
         mPlayrefresh.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.replay(false);
+                //listener.replay(false);
                 hideBottom();
             }
         });
         mNextBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.playNext(false);
+                //listener.playNext(false);
                 hideBottom();
             }
         });
         mPreBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.playPre();
+                // listener.playPre();
                 hideBottom();
             }
         });
-        mPlayerScaleBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    int scaleType = mPlayerConfig.getInt("sc");
-                    scaleType++;
-                    if (scaleType > 5)
-                        scaleType = 0;
-                    mPlayerConfig.put("sc", scaleType);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    mControlWrapper.setScreenScaleType(scaleType);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerSpeedBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    float speed = (float) mPlayerConfig.getDouble("sp");
-                    speed += 0.25f;
-                    if (speed > 3)
-                        speed = 0.5f;
-                    mPlayerConfig.put("sp", speed);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    speed_old = speed;
-                    mControlWrapper.setSpeed(speed);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        // mPlayerScaleBtn.setOnClickListener(new OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         myHandle.removeCallbacks(myRunnable);
+        //         myHandle.postDelayed(myRunnable, myHandleSeconds);
+        //         try {
+        //             int scaleType = mPlayerConfig.getInt("sc");
+        //             scaleType++;
+        //             if (scaleType > 5)
+        //                 scaleType = 0;
+        //             mPlayerConfig.put("sc", scaleType);
+        //             updatePlayerCfgView();
+        //             listener.updatePlayerCfg();
+        //             mControlWrapper.setScreenScaleType(scaleType);
+        //         } catch (JSONException e) {
+        //             e.printStackTrace();
+        //         }
+        //     }
+        // });
+        // mPlayerSpeedBtn.setOnClickListener(new OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         myHandle.removeCallbacks(myRunnable);
+        //         myHandle.postDelayed(myRunnable, myHandleSeconds);
+        //         try {
+        //             float speed = (float) mPlayerConfig.getDouble("sp");
+        //             speed += 0.25f;
+        //             if (speed > 3)
+        //                 speed = 0.5f;
+        //             mPlayerConfig.put("sp", speed);
+        //             updatePlayerCfgView();
+        //             listener.updatePlayerCfg();
+        //             speed_old = speed;
+        //             mControlWrapper.setSpeed(speed);
+        //         } catch (JSONException e) {
+        //             e.printStackTrace();
+        //         }
+        //     }
+        // });
 
-        mPlayerSpeedBtn.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                try {
-                    mPlayerConfig.put("sp", 1.0f);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    speed_old = 1.0f;
-                    mControlWrapper.setSpeed(1.0f);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
-        mPlayerBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    int playerType = mPlayerConfig.getInt("pl");
-                    ArrayList<Integer> exsitPlayerTypes = PlayerHelper.getExistPlayerTypes();
-                    int playerTypeIdx = 0;
-                    int playerTypeSize = exsitPlayerTypes.size();
-                    for(int i = 0; i<playerTypeSize; i++) {
-                        if (playerType == exsitPlayerTypes.get(i)) {
-                            if (i == playerTypeSize - 1) {
-                                playerTypeIdx = 0;
-                            } else {
-                                playerTypeIdx = i + 1;
-                            }
-                        }
-                    }
-                    playerType = exsitPlayerTypes.get(playerTypeIdx);
-                    mPlayerConfig.put("pl", playerType);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    listener.replay(false);
-                    hideBottom();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                mPlayerBtn.requestFocus();
-                mPlayerBtn.requestFocusFromTouch();
-            }
-        });
+        // mPlayerSpeedBtn.setOnLongClickListener(new OnLongClickListener() {
+        //     @Override
+        //     public boolean onLongClick(View view) {
+        //         try {
+        //             mPlayerConfig.put("sp", 1.0f);
+        //             updatePlayerCfgView();
+        //             listener.updatePlayerCfg();
+        //             speed_old = 1.0f;
+        //             mControlWrapper.setSpeed(1.0f);
+        //         } catch (JSONException e) {
+        //             e.printStackTrace();
+        //         }
+        //         return true;
+        //     }
+        // });
 
-        mPlayerBtn.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                FastClickCheckUtil.check(view);
-                try {
-                    int playerType = mPlayerConfig.getInt("pl");
-                    int defaultPos = 0;
-                    ArrayList<Integer> players = PlayerHelper.getExistPlayerTypes();
-                    ArrayList<Integer> renders = new ArrayList<>();
-                    for(int p = 0; p<players.size(); p++) {
-                        renders.add(p);
-                        if (players.get(p) == playerType) {
-                            defaultPos = p;
-                        }
-                    }
-                    SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
-                    dialog.setTip("请选择播放器");
-                    dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<Integer>() {
-                        @Override
-                        public void click(Integer value, int pos) {
-                            try {
-                                dialog.cancel();
-                                int thisPlayType = players.get(pos);
-                                if (thisPlayType != playerType) {
-                                    mPlayerConfig.put("pl", thisPlayType);
-                                    updatePlayerCfgView();
-                                    listener.updatePlayerCfg();
-                                    listener.replay(false);
-                                    hideBottom();
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            mPlayerBtn.requestFocus();
-                            mPlayerBtn.requestFocusFromTouch();
-                        }
+        // mPlayerBtn.setOnClickListener(new OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         myHandle.removeCallbacks(myRunnable);
+        //         myHandle.postDelayed(myRunnable, myHandleSeconds);
+        //         try {
+        //             int playerType = mPlayerConfig.getInt("pl");
+        //             ArrayList<Integer> exsitPlayerTypes = PlayerHelper.getExistPlayerTypes();
+        //             int playerTypeIdx = 0;
+        //             int playerTypeSize = exsitPlayerTypes.size();
+        //             for(int i = 0; i<playerTypeSize; i++) {
+        //                 if (playerType == exsitPlayerTypes.get(i)) {
+        //                     if (i == playerTypeSize - 1) {
+        //                         playerTypeIdx = 0;
+        //                     } else {
+        //                         playerTypeIdx = i + 1;
+        //                     }
+        //                 }
+        //             }
+        //             playerType = exsitPlayerTypes.get(playerTypeIdx);
+        //             mPlayerConfig.put("pl", playerType);
+        //             updatePlayerCfgView();
+        //             listener.updatePlayerCfg();
+        //             listener.replay(false);
+        //             hideBottom();
+        //         } catch (JSONException e) {
+        //             e.printStackTrace();
+        //         }
+        //         mPlayerBtn.requestFocus();
+        //         mPlayerBtn.requestFocusFromTouch();
+        //     }
+        // });
 
-                        @Override
-                        public String getDisplay(Integer val) {
-                            Integer playerType = players.get(val);
-                            return PlayerHelper.getPlayerName(playerType);
-                        }
-                    }, new DiffUtil.ItemCallback<Integer>() {
-                        @Override
-                        public boolean areItemsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
-                            return oldItem.intValue() == newItem.intValue();
-                        }
+        // mPlayerBtn.setOnLongClickListener(new OnLongClickListener() {
+        //     @Override
+        //     public boolean onLongClick(View view) {
+        //         myHandle.removeCallbacks(myRunnable);
+        //         myHandle.postDelayed(myRunnable, myHandleSeconds);
+        //         FastClickCheckUtil.check(view);
+        //         try {
+        //             int playerType = mPlayerConfig.getInt("pl");
+        //             int defaultPos = 0;
+        //             ArrayList<Integer> players = PlayerHelper.getExistPlayerTypes();
+        //             ArrayList<Integer> renders = new ArrayList<>();
+        //             for(int p = 0; p<players.size(); p++) {
+        //                 renders.add(p);
+        //                 if (players.get(p) == playerType) {
+        //                     defaultPos = p;
+        //                 }
+        //             }
+        //             SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
+        //             dialog.setTip("请选择播放器");
+        //             dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<Integer>() {
+        //                 @Override
+        //                 public void click(Integer value, int pos) {
+        //                     try {
+        //                         dialog.cancel();
+        //                         int thisPlayType = players.get(pos);
+        //                         if (thisPlayType != playerType) {
+        //                             mPlayerConfig.put("pl", thisPlayType);
+        //                             updatePlayerCfgView();
+        //                             listener.updatePlayerCfg();
+        //                             listener.replay(false);
+        //                             hideBottom();
+        //                         }
+        //                     } catch (Exception e) {
+        //                         e.printStackTrace();
+        //                     }
+        //                     mPlayerBtn.requestFocus();
+        //                     mPlayerBtn.requestFocusFromTouch();
+        //                 }
 
-                        @Override
-                        public boolean areContentsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
-                            return oldItem.intValue() == newItem.intValue();
-                        }
-                    }, renders, defaultPos);
-                    dialog.show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
-        mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    String ijk = mPlayerConfig.getString("ijk");
-                    List<IJKCode> codecs = ApiConfig.get().getIjkCodes();
-                    for (int i = 0; i < codecs.size(); i++) {
-                        if (ijk.equals(codecs.get(i).getName())) {
-                            if (i >= codecs.size() - 1)
-                                ijk = codecs.get(0).getName();
-                            else {
-                                ijk = codecs.get(i + 1).getName();
-                            }
-                            break;
-                        }
-                    }
-                    mPlayerConfig.put("ijk", ijk);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                    listener.replay(false);
-                    hideBottom();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                mPlayerIJKBtn.requestFocus();
-                mPlayerIJKBtn.requestFocusFromTouch();
-            }
-        });
-//        增加播放页面片头片尾时间重置
-        mPlayerTimeResetBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    mPlayerConfig.put("et", 0);
-                    mPlayerConfig.put("st", 0);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerTimeStartBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    int current = (int) mControlWrapper.getCurrentPosition();
-                    int duration = (int) mControlWrapper.getDuration();
-                    if (current > duration / 2) return;
-                    mPlayerConfig.put("st",current/1000);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerTimeStartBtn.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                try {
-                    mPlayerConfig.put("st", 0);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
-        mPlayerTimeSkipBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                try {
-                    int current = (int) mControlWrapper.getCurrentPosition();
-                    int duration = (int) mControlWrapper.getDuration();
-                    if (current < duration / 2) return;
-                    mPlayerConfig.put("et", (duration - current)/1000);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        mPlayerTimeSkipBtn.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                try {
-                    mPlayerConfig.put("et", 0);
-                    updatePlayerCfgView();
-                    listener.updatePlayerCfg();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return true;
-            }
-        });
-        mZimuBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FastClickCheckUtil.check(view);
-                listener.selectSubtitle();
-                hideBottom();
-            }
-        });
-        mZimuBtn.setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                mSubtitleView.setVisibility(View.GONE);
-                mSubtitleView.destroy();
-                mSubtitleView.clearSubtitleCache();
-                mSubtitleView.isInternal = false;
-                hideBottom();
-                Toast.makeText(getContext(), "字幕已关闭", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-        mAudioTrackBtn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FastClickCheckUtil.check(view);
-                listener.selectAudioTrack();
-                hideBottom();
-            }
-        });
+        //                 @Override
+        //                 public String getDisplay(Integer val) {
+        //                     Integer playerType = players.get(val);
+        //                     return PlayerHelper.getPlayerName(playerType);
+        //                 }
+        //             }, new DiffUtil.ItemCallback<Integer>() {
+        //                 @Override
+        //                 public boolean areItemsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
+        //                     return oldItem.intValue() == newItem.intValue();
+        //                 }
+
+        //                 @Override
+        //                 public boolean areContentsTheSame(@NonNull @NotNull Integer oldItem, @NonNull @NotNull Integer newItem) {
+        //                     return oldItem.intValue() == newItem.intValue();
+        //                 }
+        //             }, renders, defaultPos);
+        //             dialog.show();
+        //         } catch (JSONException e) {
+        //             e.printStackTrace();
+        //         }
+        //         return true;
+        //     }
+        // });
+        // mPlayerIJKBtn.setOnClickListener(new OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         myHandle.removeCallbacks(myRunnable);
+        //         myHandle.postDelayed(myRunnable, myHandleSeconds);
+        //         try {
+        //             String ijk = mPlayerConfig.getString("ijk");
+        //             List<IJKCode> codecs = ApiConfig.get().getIjkCodes();
+        //             for (int i = 0; i < codecs.size(); i++) {
+        //                 if (ijk.equals(codecs.get(i).getName())) {
+        //                     if (i >= codecs.size() - 1)
+        //                         ijk = codecs.get(0).getName();
+        //                     else {
+        //                         ijk = codecs.get(i + 1).getName();
+        //                     }
+        //                     break;
+        //                 }
+        //             }
+        //             mPlayerConfig.put("ijk", ijk);
+        //             updatePlayerCfgView();
+        //             listener.updatePlayerCfg();
+        //             listener.replay(false);
+        //             hideBottom();
+        //         } catch (JSONException e) {
+        //             e.printStackTrace();
+        //         }
+        //         mPlayerIJKBtn.requestFocus();
+        //         mPlayerIJKBtn.requestFocusFromTouch();
+        //     }
+        // });
+// //        增加播放页面片头片尾时间重置
+//         mPlayerTimeResetBtn.setOnClickListener(new OnClickListener() {
+//             @Override
+//             public void onClick(View v) {
+//                 myHandle.removeCallbacks(myRunnable);
+//                 myHandle.postDelayed(myRunnable, myHandleSeconds);
+//                 try {
+//                     mPlayerConfig.put("et", 0);
+//                     mPlayerConfig.put("st", 0);
+//                     updatePlayerCfgView();
+//                     listener.updatePlayerCfg();
+//                 } catch (JSONException e) {
+//                     e.printStackTrace();
+//                 }
+//             }
+//         });
+//         mPlayerTimeStartBtn.setOnClickListener(new OnClickListener() {
+//             @Override
+//             public void onClick(View view) {
+//                 myHandle.removeCallbacks(myRunnable);
+//                 myHandle.postDelayed(myRunnable, myHandleSeconds);
+//                 try {
+//                     int current = (int) mControlWrapper.getCurrentPosition();
+//                     int duration = (int) mControlWrapper.getDuration();
+//                     if (current > duration / 2) return;
+//                     mPlayerConfig.put("st",current/1000);
+//                     updatePlayerCfgView();
+//                     listener.updatePlayerCfg();
+//                 } catch (JSONException e) {
+//                     e.printStackTrace();
+//                 }
+//             }
+//         });
+//         mPlayerTimeStartBtn.setOnLongClickListener(new OnLongClickListener() {
+//             @Override
+//             public boolean onLongClick(View view) {
+//                 try {
+//                     mPlayerConfig.put("st", 0);
+//                     updatePlayerCfgView();
+//                     listener.updatePlayerCfg();
+//                 } catch (JSONException e) {
+//                     e.printStackTrace();
+//                 }
+//                 return true;
+//             }
+//         });
+//         mPlayerTimeSkipBtn.setOnClickListener(new OnClickListener() {
+//             @Override
+//             public void onClick(View view) {
+//                 myHandle.removeCallbacks(myRunnable);
+//                 myHandle.postDelayed(myRunnable, myHandleSeconds);
+//                 try {
+//                     int current = (int) mControlWrapper.getCurrentPosition();
+//                     int duration = (int) mControlWrapper.getDuration();
+//                     if (current < duration / 2) return;
+//                     mPlayerConfig.put("et", (duration - current)/1000);
+//                     updatePlayerCfgView();
+//                     listener.updatePlayerCfg();
+//                 } catch (JSONException e) {
+//                     e.printStackTrace();
+//                 }
+//             }
+//         });
+//         mPlayerTimeSkipBtn.setOnLongClickListener(new OnLongClickListener() {
+//             @Override
+//             public boolean onLongClick(View view) {
+//                 try {
+//                     mPlayerConfig.put("et", 0);
+//                     updatePlayerCfgView();
+//                     listener.updatePlayerCfg();
+//                 } catch (JSONException e) {
+//                     e.printStackTrace();
+//                 }
+//                 return true;
+//             }
+//         });
+        // mZimuBtn.setOnClickListener(new OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         FastClickCheckUtil.check(view);
+        //         listener.selectSubtitle();
+        //         hideBottom();
+        //     }
+        // });
+        // mZimuBtn.setOnLongClickListener(new OnLongClickListener() {
+        //     @Override
+        //     public boolean onLongClick(View view) {
+        //         mSubtitleView.setVisibility(View.GONE);
+        //         mSubtitleView.destroy();
+        //         mSubtitleView.clearSubtitleCache();
+        //         mSubtitleView.isInternal = false;
+        //         hideBottom();
+        //         Toast.makeText(getContext(), "字幕已关闭", Toast.LENGTH_SHORT).show();
+        //         return true;
+        //     }
+        // });
+        // mAudioTrackBtn.setOnClickListener(new OnClickListener() {
+        //     @Override
+        //     public void onClick(View view) {
+        //         FastClickCheckUtil.check(view);
+        //         listener.selectAudioTrack();
+        //         hideBottom();
+        //     }
+        // });
         mLandscapePortraitBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -776,19 +828,26 @@ public class VodController extends BaseController {
             }
         }
         mCurrentTime.setText(PlayerUtils.stringForTime(position));
+        mCurrentTime2.setText(PlayerUtils.stringForTime(position));
         mTotalTime.setText(PlayerUtils.stringForTime(duration));
+        mTotalTime2.setText(PlayerUtils.stringForTime(duration));
         if (duration > 0) {
             mSeekBar.setEnabled(true);
+            mSeekBar2.setEnabled(true);
             int pos = (int) (position * 1.0 / duration * mSeekBar.getMax());
             mSeekBar.setProgress(pos);
+            mSeekBar2.setProgress(pos);
         } else {
             mSeekBar.setEnabled(false);
+            mSeekBar2.setEnabled(false);
         }
         int percent = mControlWrapper.getBufferedPercentage();
         if (percent >= 95) {
             mSeekBar.setSecondaryProgress(mSeekBar.getMax());
+            mSeekBar2.setSecondaryProgress(mSeekBar.getMax());
         } else {
             mSeekBar.setSecondaryProgress(percent * 10);
+            mSeekBar2.setSecondaryProgress(percent * 10);
         }
     }
 
@@ -848,6 +907,10 @@ public class VodController extends BaseController {
             case VideoView.STATE_PLAYING:
                 initLandscapePortraitBtnInfo();
                 startProgress();
+                // 进度条
+                mBottomRoot2.setVisibility(VISIBLE);
+                // 时钟 下载速度
+                mTopRoot2.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PAUSED:
                 mTopRoot1.setVisibility(GONE);

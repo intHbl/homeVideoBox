@@ -130,7 +130,8 @@ public class ApiConfig {
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
-        String apiUrl = Hawk.get(HawkConfig.API_URL, "https://chengxue2020.github.io/Cat-ports/main.json");
+        // api here
+        String apiUrl = Hawk.get(HawkConfig.API_URL, "http://server.lan:9966/tvbox/home.json");
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;
