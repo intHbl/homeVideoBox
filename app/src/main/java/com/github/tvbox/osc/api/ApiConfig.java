@@ -131,7 +131,9 @@ public class ApiConfig {
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         // api here
-        String apiUrl = Hawk.get(HawkConfig.API_URL, "http://server.lan:9966/tvbox/home.json");
+        // String apiUrl = Hawk.get(HawkConfig.API_URL, "http://server.lan:9966/tvbox/home.json");
+        String apiUrl = "http://server.lan:9966/tvbox/home.json";
+
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;
