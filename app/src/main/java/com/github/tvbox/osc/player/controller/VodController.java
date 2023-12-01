@@ -891,10 +891,16 @@ public class VodController extends BaseController {
         } else {
             mProgressIcon.setImageResource(R.drawable.icon_back);
         }
+        //XXTODO
         mProgressText.setText(PlayerUtils.stringForTime(seekTo) + " / " + PlayerUtils.stringForTime(duration));
         mHandler.sendEmptyMessage(1000);
         mHandler.removeMessages(1001);
         mHandler.sendEmptyMessageDelayed(1001, 1000);
+
+        int pos = (int) (seekTo * 1.0 / duration * mSeekBar.getMax());
+        mSeekBar.setProgress(pos);
+        mSeekBar2.setProgress(pos);
+
     }
 
     @Override

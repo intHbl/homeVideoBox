@@ -183,6 +183,7 @@
 
                     <TextView
                         android:id="@+id/tvQuickSearch"
+                        android:visibility="gone"
                         android:layout_width="@dimen/vs_120"
                         android:layout_height="@dimen/vs_40"
                         android:layout_marginEnd="@dimen/vs_10"
@@ -196,6 +197,7 @@
 
                     <TextView
                         android:id="@+id/tvSort"
+                        android:visibility="gone"
                         android:layout_width="@dimen/vs_120"
                         android:layout_height="@dimen/vs_40"
                         android:layout_marginEnd="@dimen/vs_10"

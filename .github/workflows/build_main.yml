@@ -71,17 +71,17 @@ jobs:
           rm -rf apk/
           mkdir -p apk/
           for file in `find ~ -name "*release*.apk" -print`; do
-            mv "$file" apk/TVBox_Frank_${{ env.tag }}_Release.apk
+            mv "$file" apk/homeVideoBox_${{ env.tag }}_Release.apk
           done
           for file in `find ~ -name "*debug*.apk" -print`; do
-            mv "$file" apk/TVBox_Frank_${{ env.tag }}_Debug.apk
+            mv "$file" apk/homeVideoBox_${{ env.tag }}_Debug.apk
           done
 
       - name: Release Note
         if: ${{ env.commit }}
         working-directory: TVBoxOSC
         run: |
-          echo -e "Credit: [${{ matrix.userName }}](${{ env.upStream }})\nCommit: ${{ env.commit }}\nChangelog:" > apk/${{ matrix.userName }}-Release.log
+          echo -e "Credit: Commit: ${{ env.commit }}\nChangelog:" > apk/homeVideoBox-Release.log
           if [ "${{ env.commit }}" == "${lastCommit}" ]; then
             git log --pretty=format:%B ${{ env.commitS }} -1 |sed -e "s# \{2,\}#\n#g" -e "/^Merge \(pull\|branch\|remote\)/d" -e '/^$/d' |cat -n |sort -k2,2 -k1,1n |uniq -f1 |sort -k1,1n |cut -f2- >> apk/${{ matrix.userName }}-Release.log
           else
@@ -92,18 +92,6 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ env.commit }}
         with:
-          name: TVBox_Frank_Release_and_Debug
+          name: homeVideoBox_Release_and_Debug
           path: TVBoxOSC/apk/*
 
-      - name: Release and Upload Assets(release area)
-        uses: softprops/action-gh-release@v1
-        if: ${{ env.commit }}
-        with:
-          name: ${{ env.tag }}
-          tag_name: ${{ env.tag }}
-          body: ${{ env.commit }}
-          files: |
-            TVBoxOSC/apk/*
-            TVBoxOSC/${{ env.commitS }}-source.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
