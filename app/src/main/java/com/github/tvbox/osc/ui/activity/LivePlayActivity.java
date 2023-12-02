@@ -694,7 +694,9 @@ public class LivePlayActivity extends BaseActivity {
             mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
         } else {
             mHandler.removeCallbacks(mHideChannelListRun);
-            mHandler.post(mHideChannelListRun);
+            // mHandler.post(mHideChannelListRun);
+
+            mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
         }
     }
 
