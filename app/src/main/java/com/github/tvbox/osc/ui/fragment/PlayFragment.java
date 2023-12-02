@@ -619,7 +619,7 @@ public class PlayFragment extends BaseLazyFragment {
         if (mVideoView.getMediaPlayer() instanceof IjkMediaPlayer) {
             trackInfo = ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).getTrackInfo();
             if (trackInfo != null && trackInfo.getAudio().size() > 0) {
-                if(TrackInfo.getAudioSelected(false)!=0){
+                if(trackInfo.getAudioSelected(false)!=0){
                     ((IjkMediaPlayer)(mVideoView.getMediaPlayer())).setTrack(trackInfo.getAudio().get(0).index);
                 }
             }
