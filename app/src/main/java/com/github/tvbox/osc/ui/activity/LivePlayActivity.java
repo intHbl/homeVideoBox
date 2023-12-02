@@ -524,11 +524,13 @@ public class LivePlayActivity extends BaseActivity {
                 ((TextView) findViewById(R.id.tv_source)).setText("[线路" + (channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum() + "]");
             }
 
+            // 频道序号 channel_Name.getSourceNum()
+            tv_right_top_tipnetspeed.setText("" + channel_Name.getChannelNum());
+
             tv_right_top_channel_name.setText(channel_Name.getChannelName());
             tv_right_top_epg_name.setText(channel_Name.getChannelName());
             
-            // 频道序号 channel_Name.getSourceNum()
-            // tv_right_top_tipnetspeed.setText(channel_Name.getSourceNum());
+            
 
             Handler handler = new Handler(Looper.getMainLooper());
             ll_right_top_loading.setVisibility(View.VISIBLE);
