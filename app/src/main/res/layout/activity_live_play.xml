@@ -716,7 +716,7 @@
 		android:layout_gravity="center|right|top"
 		android:orientation="vertical"
 		android:id="@+id/ll_right_top_loading"
-		android:background="@drawable/shape_user_search"
+		android:background="#50181B18"
 		android:layout_width="@dimen/vs_150"
 		android:layout_height="@dimen/vs_60"
 		android:layout_marginTop="25mm"
@@ -755,7 +755,7 @@
 			android:ellipsize="marquee"
 			android:gravity="right"
 			android:marqueeRepeatLimit="marquee_forever"
-			android:singleLine="true"
+			android:singleLine="false"
 			android:text="测试频道"
 			android:textColor="#FFFCFFFF"
 			android:textSize="@dimen/vs_20" />
@@ -765,11 +765,12 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="right"
 			android:gravity="right"
+			android:layout_alignParentBottom="true"
 			android:orientation="horizontal">
 
 			<TextView
 				android:id="@+id/tv_right_top_channel_numx"
-				android:layout_width="match_parent"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentBottom="true"
 				android:layout_gravity="right"
@@ -782,7 +783,7 @@
 
 			<TextView
 				android:id="@+id/tv_right_top_tipnetspeed"
-				android:layout_width="match_parent"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignParentBottom="true"
 				android:layout_gravity="right"
