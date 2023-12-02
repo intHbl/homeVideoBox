@@ -716,7 +716,7 @@
 		android:layout_gravity="center|right|top"
 		android:orientation="vertical"
 		android:id="@+id/ll_right_top_loading"
-		android:background="#50181B18"
+		android:background="#10101010"
 		android:layout_width="@dimen/vs_150"
 		android:layout_height="@dimen/vs_60"
 		android:layout_marginTop="25mm"
@@ -765,6 +765,9 @@
 			android:layout_height="wrap_content"
 			android:layout_gravity="right"
 			android:gravity="right"
+			android:layout_alignParentRight="true"
+			android:layout_marginStart="0dp"
+			android:layout_marginEnd="0dp"
 			android:layout_alignParentBottom="true"
 			android:orientation="horizontal">
 
@@ -787,7 +790,6 @@
 				android:layout_height="wrap_content"
 				android:layout_alignParentBottom="true"
 				android:layout_gravity="right"
-				android:layout_marginRight="@dimen/vs_5"
 				android:gravity="right"
 				android:singleLine="true"
 				android:text=""
