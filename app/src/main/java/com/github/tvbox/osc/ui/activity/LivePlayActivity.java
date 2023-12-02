@@ -528,7 +528,7 @@ public class LivePlayActivity extends BaseActivity {
             tv_right_top_epg_name.setText(channel_Name.getChannelName());
             
             // 频道序号 channel_Name.getSourceNum()
-            tv_right_top_tipnetspeed.setText(channel_Name.getSourceNum())
+            tv_right_top_tipnetspeed.setText(channel_Name.getSourceNum());
 
             Handler handler = new Handler(Looper.getMainLooper());
             ll_right_top_loading.setVisibility(View.VISIBLE);
