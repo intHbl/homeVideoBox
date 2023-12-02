@@ -474,7 +474,8 @@ public class LivePlayActivity extends BaseActivity {
             String savedEpgKey = channel_Name.getChannelName() + "_" + liveEpgDateAdapter.getItem(liveEpgDateAdapter.getSelectedIndex()).getDatePresented();
             if (hsEpg.containsKey(savedEpgKey)) {
                 String[] epgInfo = EpgUtil.getEpgInfo(channel_Name.getChannelName());
-                updateChannelIcon(channel_Name.getChannelName(), epgInfo == null ? null : epgInfo[0]);
+                // 不显示 图标
+                //updateChannelIcon(channel_Name.getChannelName(), epgInfo == null ? null : epgInfo[0]);
                 ArrayList arrayList = (ArrayList) hsEpg.get(savedEpgKey);
                 if (arrayList != null && arrayList.size() > 0) {
                     int size = arrayList.size() - 1;
@@ -614,9 +615,11 @@ public class LivePlayActivity extends BaseActivity {
                     case KeyEvent.KEYCODE_DPAD_UP:
                         // XXTODO 上下键 
                         playPrevious();
+                        break;
                     case KeyEvent.KEYCODE_DPAD_DOWN:
                         // XXTODO
                         playNext();
+                        break;
                     case KeyEvent.KEYCODE_DPAD_LEFT:
                         if(isBack){
                             showProgressBars(true);
@@ -627,21 +630,19 @@ public class LivePlayActivity extends BaseActivity {
                         // }
                         break;
                     case KeyEvent.KEYCODE_DPAD_RIGHT:
-                        if(isBack){
+                        if(isBack){//回放?
                             showProgressBars(true);
                         }
                         // 不换源
                         // }else{
                         //     playNextSource();
                         // }
-                        // break;
+                        break;
                     case KeyEvent.KEYCODE_DPAD_CENTER:
                     case KeyEvent.KEYCODE_ENTER:
                     case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                        if(!isBack){
-                            showChannelList();
-                        }
                         showBottomEpg();
+                        showChannelList();
                         break;
                 }
             }
@@ -790,8 +791,8 @@ public class LivePlayActivity extends BaseActivity {
         }
 
         channel_Name = currentLiveChannelItem;
-        isSHIYI=false;
-        isBack = false;
+        isSHIYI=false; //时移
+        isBack = false; // 回放?
         //只有url包含pltv/8888才会显示时移功能
 		if(currentLiveChannelItem.getUrl().indexOf("PLTV/8888") !=-1){
             currentLiveChannelItem.setinclude_back(true);
@@ -800,7 +801,9 @@ public class LivePlayActivity extends BaseActivity {
         }
         showBottomEpg();
         getEpg(new Date());
+        
         backcontroller.setVisibility(View.GONE);
+
         ll_right_top_huikan.setVisibility(View.GONE);
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
         // showChannelInfo();
