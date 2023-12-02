@@ -146,6 +146,8 @@ public class LivePlayActivity extends BaseActivity {
     TextView tv_nextepg_left;
     private MyEpgAdapter myAdapter;
     private TextView tv_right_top_tipnetspeed;
+    private TextView tv_right_top_channel_numX;
+    
     private TextView tv_right_top_channel_name;
     private TextView tv_right_top_epg_name;
     private TextView tv_right_top_type;
@@ -226,6 +228,7 @@ public class LivePlayActivity extends BaseActivity {
         tv_curepg_left = (TextView) findViewById(R.id.tv_current_program);//当前节目
         tv_nextepg_left= (TextView) findViewById(R.id.tv_current_program);//下一节目
         ll_epg = (RelativeLayout) findViewById(R.id.ll_epg);
+        tv_right_top_channel_numX = (TextView)findViewById(R.id.tv_right_top_channel_numX);
         tv_right_top_tipnetspeed = (TextView)findViewById(R.id.tv_right_top_tipnetspeed);
         tv_right_top_channel_name = (TextView)findViewById(R.id.tv_right_top_channel_name);
         tv_right_top_epg_name = (TextView)findViewById(R.id.tv_right_top_epg_name);
@@ -520,9 +523,10 @@ public class LivePlayActivity extends BaseActivity {
                 ll_epg.setVisibility(View.GONE);
             }
 
-            String str_source=""+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum();
+            String str_source="("+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum()+")";
             // 频道序号 channel_Name.getSourceNum()
-            tv_right_top_tipnetspeed.setText("" + channel_Name.getChannelNum() + "   ("+str_source+")");
+            tv_right_top_channel_numX.setText("" + channel_Name.getChannelNum());
+            tv_right_top_tipnetspeed.setText(str_source);
 
             if (channel_Name == null || channel_Name.getSourceNum() <= 0) {
                 ((TextView) findViewById(R.id.tv_source)).setText("1/1");
@@ -1258,7 +1262,8 @@ public class LivePlayActivity extends BaseActivity {
             if(channel_Name!=null){
                 String str_source="   ("+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum()+")";
                 // 频道序号 channel_Name.getSourceNum()
-                tv_right_top_tipnetspeed.setText("" + channel_Name.getChannelNum() + str_source);
+                tv_right_top_channel_numX.setText("" + channel_Name.getChannelNum());
+                tv_right_top_tipnetspeed.setText(str_source);
             }
 
             playNextSource();
