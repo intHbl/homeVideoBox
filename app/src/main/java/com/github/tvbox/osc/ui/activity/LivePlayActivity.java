@@ -800,7 +800,7 @@ public class LivePlayActivity extends BaseActivity {
         ll_right_top_huikan.setVisibility(View.GONE);
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
         // showChannelInfo();
-        Toast.makeText(App.getInstance(), "源: 1/"+currentLiveChannelItem.getSourceNum(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(App.getInstance(), "源: 1/"+currentLiveChannelItem.getSourceNum(), Toast.LENGTH_SHORT).show();
         mVideoView.start();
         return true;
     }
@@ -1244,7 +1244,7 @@ public class LivePlayActivity extends BaseActivity {
                 //XXTODO 把 换源 这个动作. 显示出来
             }
 
-            Toast.makeText(App.getInstance(), "源: "+(currentLiveChangeSourceTimes+1)+"/"+currentLiveChannelItem.getSourceNum(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(App.getInstance(), "源: "+(currentLiveChangeSourceTimes+1)+"/"+currentLiveChannelItem.getSourceNum(), Toast.LENGTH_SHORT).show();
             
             playNextSource();
         }
