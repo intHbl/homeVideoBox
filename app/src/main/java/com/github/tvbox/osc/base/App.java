@@ -76,6 +76,7 @@ public class App extends MultiDexApplication {
         Hawk.put(HawkConfig.IJK_CODEC, "硬解码");    		// 硬解码
         // }
 
+        // 放在 live 的逻辑里做了.  直接写死 true
         // LIVE_CHANNEL = "last_live_channel_name";
         // LIVE_CHANNEL_REVERSE = "live_channel_reverse";
         // LIVE_CROSS_GROUP = "live_cross_group";
@@ -83,7 +84,6 @@ public class App extends MultiDexApplication {
         // LIVE_SHOW_NET_SPEED = "live_show_net_speed";
         // LIVE_SHOW_TIME = "live_show_time";
 
-        Hawk.put(HawkConfig.
     }
 
     public static App getInstance() {
