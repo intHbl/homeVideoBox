@@ -361,7 +361,7 @@
         android:layout_marginRight="60mm"
         android:background="@drawable/shape_live_channel_num"
         android:gravity="center"
-        android:paddingTop="5mm"
+        android:paddingTop="1mm"
         android:paddingBottom="5mm"
         android:textColor="@android:color/white"
         android:textSize="36mm"
@@ -758,19 +758,19 @@
 			android:singleLine="true"
 			android:text="测试频道"
 			android:textColor="#FFFCFFFF"
-			android:textSize="@dimen/vs_30" />
+			android:textSize="@dimen/vs_20" />
 
 		<TextView
 			android:id="@+id/tv_right_top_tipnetspeed"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
-			android:layout_gravity="center"
+			android:layout_gravity="right"
 			android:layout_marginEnd="@dimen/vs_5"
 			android:layout_marginRight="@dimen/vs_5"
 			android:layout_toStartOf="@+id/iv_circle_bg"
 			android:layout_toLeftOf="@+id/iv_circle_bg"
-			android:gravity="center"
+			android:gravity="right"
 			android:singleLine="true"
 			android:text=""
 			tools:text="0Kb/s"
