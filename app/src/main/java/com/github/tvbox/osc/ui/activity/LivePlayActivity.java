@@ -649,9 +649,23 @@ public class LivePlayActivity extends BaseActivity {
                         showChannelList();
                         break;
                 }
-            }
+            } 
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
+            int keyCode = event.getKeyCode();
+            if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_DPAD_CENTER:
+                    case KeyEvent.KEYCODE_ENTER:
+                    case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                        showChannelList();
+                        // mHandler.post(mFocusCurrentChannelAndShowChannelList);
+                        break;
+                }
+            }
+
         }
+        
+        
         return super.dispatchKeyEvent(event);
     }
 
@@ -697,7 +711,7 @@ public class LivePlayActivity extends BaseActivity {
         mChannelGroupView.scrollToPosition(currentChannelGroupIndex);
         mChannelGroupView.setSelection(currentChannelGroupIndex);
         mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
-        
+
         mHandler.removeCallbacks(mHideChannelListRun);
         mHandler.postDelayed(mHideChannelListRun,5000);
         // } else {
