@@ -799,7 +799,8 @@ public class LivePlayActivity extends BaseActivity {
         backcontroller.setVisibility(View.GONE);
         ll_right_top_huikan.setVisibility(View.GONE);
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
-       // showChannelInfo();
+        // showChannelInfo();
+        Toast.makeText("源: 1/"+currentLiveChannelItem.getSourceNum());
         mVideoView.start();
         return true;
     }
@@ -1172,7 +1173,8 @@ public class LivePlayActivity extends BaseActivity {
 
             @Override
             public void longPress() {
-                showSettingGroup();
+                // 永不 显示 设置
+                // showSettingGroup();
             }
 
             @Override
@@ -1225,14 +1227,26 @@ public class LivePlayActivity extends BaseActivity {
     private Runnable mConnectTimeoutChangeSourceRun = new Runnable() {
         @Override
         public void run() {
+            // currentLiveChangeSourceTimes++;
+            // if (currentLiveChannelItem.getSourceNum() == currentLiveChangeSourceTimes) {
+            //     currentLiveChangeSourceTimes = 0;
+            //     Integer[] groupChannelIndex = getNextChannel(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false) ? -1 : 1);
+            //     playChannel(groupChannelIndex[0], groupChannelIndex[1], false);
+            // } else {
+            //     playNextSource();
+            // }
+            // 只换源, 不换频道!!!!
+
             currentLiveChangeSourceTimes++;
-            if (currentLiveChannelItem.getSourceNum() == currentLiveChangeSourceTimes) {
+
+            if (currentLiveChangeSourceTimes>=currentLiveChannelItem.getSourceNum()) {
                 currentLiveChangeSourceTimes = 0;
-                Integer[] groupChannelIndex = getNextChannel(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false) ? -1 : 1);
-                playChannel(groupChannelIndex[0], groupChannelIndex[1], false);
-            } else {
-                playNextSource();
+                //XXTODO 把 换源 这个动作. 显示出来
             }
+
+            Toast.makeText("源: "+(currentLiveChangeSourceTimes+1)+"/"+currentLiveChannelItem.getSourceNum());
+            
+            playNextSource();
         }
     };
 
