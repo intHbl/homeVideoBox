@@ -173,6 +173,7 @@ public class LivePlayActivity extends BaseActivity {
     public static String day = formatDate.format(new Date());
     public static Date nowday = new Date();
 
+    private boolean hasENTER_pressed=false;
     private boolean isSHIYI = false;
     private boolean isBack = false;
     private static String shiyi_time;//时移时间
@@ -648,6 +649,13 @@ public class LivePlayActivity extends BaseActivity {
                         showBottomEpg();
                         showChannelList();
                         break;
+                }else if(tvLeftChannelListLayout.getVisibility()==View.VISIBLE){
+                    if (keyCode==KeyEvent.KEYCODE_DPAD_CENTER
+                        || keyCode==KeyEvent.KEYCODE_ENTER
+                        || keyCode==KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE){
+
+                        hasENTER_pressed=true;
+                    }
                 }
             } 
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
@@ -1220,8 +1228,9 @@ public class LivePlayActivity extends BaseActivity {
                     case VideoView.STATE_PLAYING:
                         currentLiveChangeSourceTimes = 0;
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-                        if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE)
-                            showChannelList();
+                        if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE){
+                            hasENTER_pressed=false;
+                        }
 
                         break;
                     case VideoView.STATE_ERROR:
@@ -1236,6 +1245,9 @@ public class LivePlayActivity extends BaseActivity {
                         //mHandler.postDelayed(mConnectTimeoutChangeSourceRun, (Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1) + 1) * 5000);
                         mHandler.postDelayed(mConnectTimeoutChangeSourceRun, 2 * 5000);
                         break;
+                }
+                if(hasENTER_pressed){
+                    showChannelList();
                 }
             }
 

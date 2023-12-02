@@ -757,7 +757,7 @@
 			android:singleLine="false"
 			android:text="测试频道"
 			android:textColor="#FFFCFFFF"
-			android:textSize="@dimen/vs_20" />
+			android:textSize="@dimen/vs_22" />
 
 		<LinearLayout
 			android:layout_width="wrap_content"
