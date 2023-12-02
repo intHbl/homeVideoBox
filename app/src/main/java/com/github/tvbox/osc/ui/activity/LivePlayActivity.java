@@ -690,18 +690,22 @@ public class LivePlayActivity extends BaseActivity {
         if (tvLeftChannelListLayout.getVisibility() == View.INVISIBLE) {
             //重新载入上一次状态
             liveChannelItemAdapter.setNewData(getLiveChannels(currentChannelGroupIndex));
-            if (currentLiveChannelIndex > -1)
-                mLiveChannelView.scrollToPosition(currentLiveChannelIndex);
-            mLiveChannelView.setSelection(currentLiveChannelIndex);
-            mChannelGroupView.scrollToPosition(currentChannelGroupIndex);
-            mChannelGroupView.setSelection(currentChannelGroupIndex);
-            mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
-        } else {
-            mHandler.removeCallbacks(mHideChannelListRun);
-            // mHandler.post(mHideChannelListRun);
-
-            mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
         }
+        if (currentLiveChannelIndex > -1)
+            mLiveChannelView.scrollToPosition(currentLiveChannelIndex);
+        mLiveChannelView.setSelection(currentLiveChannelIndex);
+        mChannelGroupView.scrollToPosition(currentChannelGroupIndex);
+        mChannelGroupView.setSelection(currentChannelGroupIndex);
+        mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
+        
+        mHandler.removeCallbacks(mHideChannelListRun);
+        mHandler.postDelayed(mHideChannelListRun,5000);
+        // } else {
+        //     mHandler.removeCallbacks(mHideChannelListRun);
+        //     // mHandler.post(mHideChannelListRun);
+
+        //     mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
+        // }
     }
 
     private Runnable mFocusCurrentChannelAndShowChannelList = new Runnable() {
