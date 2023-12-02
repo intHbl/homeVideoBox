@@ -716,13 +716,12 @@
 		android:layout_gravity="center|right|top"
 		android:orientation="vertical"
 		android:id="@+id/ll_right_top_loading"
-		android:background="#10101010"
-		android:layout_width="@dimen/vs_150"
+		android:layout_width="@dimen/vs_250"
 		android:layout_height="@dimen/vs_60"
 		android:layout_marginTop="25mm"
 		android:layout_marginRight="5mm"
 
-		android:minWidth="150px">
+		android:minWidth="200px">
 		<!--
 		<ImageView
 			android:id="@+id/iv_circle_bg"
@@ -781,6 +780,7 @@
 				android:gravity="right"
 				android:singleLine="true"
 				android:text=""
+				android:background="#10101010"
 				android:textColor="#FFFCFFFF"
 				android:textSize="@dimen/vs_25" />
 
