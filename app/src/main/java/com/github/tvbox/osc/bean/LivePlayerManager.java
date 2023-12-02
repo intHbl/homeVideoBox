@@ -22,10 +22,16 @@ public class LivePlayerManager {
 
     public void init(VideoView videoView) {
         try {
-            defaultPlayerConfig.put("pl", Hawk.get(HawkConfig.PLAY_TYPE, 0));
-            defaultPlayerConfig.put("ijk", Hawk.get(HawkConfig.IJK_CODEC, "软解码"));
+            // defaultPlayerConfig.put("pl", Hawk.get(HawkConfig.PLAY_TYPE, 0));
+            // defaultPlayerConfig.put("ijk", Hawk.get(HawkConfig.IJK_CODEC, "软解码"));
+            // defaultPlayerConfig.put("pr", Hawk.get(HawkConfig.PLAY_RENDER, 0));
+            // defaultPlayerConfig.put("sc", Hawk.get(HawkConfig.PLAY_SCALE, 0));
+            defaultPlayerConfig.put("pl", 1);//0=默认, 1=ijk 2=exo  
+            // 有些直播 不显示(黑屏),换播放器可以放...
+            //   但是 设置很麻烦,  所以 默认 设置: ijk,硬解.
+            defaultPlayerConfig.put("ijk", "硬解码"); // "pl" 设置为1 才需要这个.
+            defaultPlayerConfig.put("sc", 0);// PLAY_SCALE
             defaultPlayerConfig.put("pr", Hawk.get(HawkConfig.PLAY_RENDER, 0));
-            defaultPlayerConfig.put("sc", Hawk.get(HawkConfig.PLAY_SCALE, 0));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -92,6 +92,6 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ env.commit }}
         with:
-          name: homeVideoBox_Release_and_Debug
+          name: homeVideoBox-Release-${{ env.commit }}
           path: TVBoxOSC/apk/*
 
