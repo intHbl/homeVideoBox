@@ -533,7 +533,7 @@ public class LivePlayActivity extends BaseActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    ll_right_top_loading.setVisibility(View.GONE);
+                    // ll_right_top_loading.setVisibility(View.GONE);
                     ll_right_top_huikan.setVisibility(View.GONE);
                 }
             }, 5000);
@@ -1694,13 +1694,13 @@ public class LivePlayActivity extends BaseActivity {
         tv_right_top_tipnetspeed.setVisibility(View.VISIBLE);
         // 默认显示 网速
         // if (Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false)) {
-        // if(true){
+        if(true){
             mHandler.post(mUpdateNetSpeedRun);
-            // tvNetSpeed.setVisibility(View.VISIBLE);
-        // } else {
-        //     mHandler.removeCallbacks(mUpdateNetSpeedRun);
-        //     tvNetSpeed.setVisibility(View.GONE);
-        // }
+            tvNetSpeed.setVisibility(View.VISIBLE);
+        } else {
+            mHandler.removeCallbacks(mUpdateNetSpeedRun);
+            tvNetSpeed.setVisibility(View.GONE);
+        }
     }
 
     private Runnable mUpdateNetSpeedRun = new Runnable() {
