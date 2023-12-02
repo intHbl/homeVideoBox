@@ -462,7 +462,7 @@ public class LivePlayActivity extends BaseActivity {
 
     //显示底部EPG
     private void showBottomEpg() {
-        if (isSHIYI)
+        if (isSHIYI||channel_Name==null)
             return;
         if (channel_Name.getChannelName() != null) {
             ((TextView) findViewById(R.id.tv_channel_bar_name)).setText(channel_Name.getChannelName());
@@ -518,14 +518,16 @@ public class LivePlayActivity extends BaseActivity {
             }else {
                 ll_epg.setVisibility(View.GONE);
             }
+
+            String str_source=""+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum();
+            // 频道序号 channel_Name.getSourceNum()
+            tv_right_top_tipnetspeed.setText("" + channel_Name.getChannelNum() + "   ("+str_source+")");
+
             if (channel_Name == null || channel_Name.getSourceNum() <= 0) {
                 ((TextView) findViewById(R.id.tv_source)).setText("1/1");
             } else {
-                ((TextView) findViewById(R.id.tv_source)).setText("[线路" + (channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum() + "]");
+                ((TextView) findViewById(R.id.tv_source)).setText("[线路" + str_source + "]");
             }
-
-            // 频道序号 channel_Name.getSourceNum()
-            tv_right_top_tipnetspeed.setText("" + channel_Name.getChannelNum());
 
             tv_right_top_channel_name.setText(channel_Name.getChannelName());
             tv_right_top_epg_name.setText(channel_Name.getChannelName());
@@ -803,6 +805,7 @@ public class LivePlayActivity extends BaseActivity {
         mVideoView.setUrl(currentLiveChannelItem.getUrl());
         // showChannelInfo();
         //Toast.makeText(App.getInstance(), "源: 1/"+currentLiveChannelItem.getSourceNum(), Toast.LENGTH_SHORT).show();
+        
         mVideoView.start();
         return true;
     }
@@ -1247,7 +1250,12 @@ public class LivePlayActivity extends BaseActivity {
             }
 
             //Toast.makeText(App.getInstance(), "源: "+(currentLiveChangeSourceTimes+1)+"/"+currentLiveChannelItem.getSourceNum(), Toast.LENGTH_SHORT).show();
-            
+            if(channel_Name!=null){
+                String str_source="   ("+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum()+")";
+                // 频道序号 channel_Name.getSourceNum()
+                tv_right_top_tipnetspeed.setText("" + channel_Name.getChannelNum() + str_source);
+            }
+
             playNextSource();
         }
     };
@@ -1730,7 +1738,7 @@ public class LivePlayActivity extends BaseActivity {
             String speed = PlayerHelper.getDisplaySpeed(mVideoView.getTcpSpeed());
             tvNetSpeed.setText(speed);
             // 这个不用显示 网速.  显示频道序号
-            tv_right_top_tipnetspeed.setText(speed);
+            // tv_right_top_tipnetspeed.setText(speed);
             mHandler.postDelayed(this, 1000);
         }
     };

@@ -647,11 +647,11 @@
 		android:id="@+id/ll_right_top_huikan"
 		android:visibility="gone"
 		android:background="@drawable/shape_thumb_bottom_name"
-		android:layout_width="290px"
+		android:layout_width="250px"
 		android:layout_height="100px"
 		android:layout_marginTop="40px"
 		android:layout_marginRight="50px"
-		android:minWidth="270px">
+		android:minWidth="170px">
 		<ImageView
 			android:id="@+id/iv_back_bg"
 			android:layout_width="90px"
@@ -722,7 +722,7 @@
 		android:layout_marginTop="25mm"
 		android:layout_marginRight="5mm"
 
-		android:minWidth="270px">
+		android:minWidth="170px">
 		<!--
 		<ImageView
 			android:id="@+id/iv_circle_bg"
