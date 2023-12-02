@@ -805,8 +805,8 @@ public class DetailActivity extends BaseActivity {
         searchTitle = mVideo.name;
         quickSearchData.clear();
         quickSearchWord.addAll(SearchHelper.splitWords(searchTitle));
-        // 分词
-        OkGo.<String>get("http://api.pullword.com/get.php?source=" + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
+        // 分词  http://api.pullword.com/get.php?source=
+        OkGo.<String>get("http://127.0.0.1?source=" + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
                 .tag("fenci")
                 .execute(new AbsCallback<String>() {
                     @Override

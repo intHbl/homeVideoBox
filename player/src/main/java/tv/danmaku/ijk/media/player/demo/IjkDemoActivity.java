@@ -69,7 +69,7 @@ public class IjkDemoActivity extends Activity {
         try {
             ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "timeout", 200);
             ijkMediaPlayer.setSurface(surface);
-            ijkMediaPlayer.setDataSource("https://cache.tkys.tv/m3u8/dsj/guochan/mp1/1.m3u8");
+            ijkMediaPlayer.setDataSource("http://server.lan:9966/1.m3u8");
             ijkMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(IMediaPlayer iMediaPlayer) {
