@@ -660,15 +660,13 @@ public class LivePlayActivity extends BaseActivity {
             } 
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
             int keyCode = event.getKeyCode();
-            if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE) {
-                switch (keyCode) {
-                    case KeyEvent.KEYCODE_DPAD_CENTER:
-                    case KeyEvent.KEYCODE_ENTER:
-                    case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                        showChannelList();
-                        // mHandler.post(mFocusCurrentChannelAndShowChannelList);
-                        break;
-                }
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                case KeyEvent.KEYCODE_ENTER:
+                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                    // showChannelList();
+                    handle_channel_nemu();
+                    break;
             }
 
         }
@@ -1201,6 +1199,15 @@ public class LivePlayActivity extends BaseActivity {
     }
 
 
+    private void handle_channel_nemu(){
+        if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE){
+            if(hasENTER_pressed){
+                // showChannelList();
+                mHandler.removeCallbacks(mFocusCurrentChannelAndShowChannelList);
+                mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList,200);
+            }
+        }
+    }
 
     private void initVideoView() {
         LiveController controller = new LiveController(this);
@@ -1228,9 +1235,8 @@ public class LivePlayActivity extends BaseActivity {
                     case VideoView.STATE_PLAYING:
                         currentLiveChangeSourceTimes = 0;
                         mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-                        if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE){
-                            hasENTER_pressed=false;
-                        }
+                        handle_channel_nemu();
+                        hasENTER_pressed=false;
 
                         break;
                     case VideoView.STATE_ERROR:
@@ -1246,9 +1252,8 @@ public class LivePlayActivity extends BaseActivity {
                         mHandler.postDelayed(mConnectTimeoutChangeSourceRun, 2 * 5000);
                         break;
                 }
-                if(hasENTER_pressed){
-                    showChannelList();
-                }
+
+                handle_channel_nemu();
             }
 
             @Override
