@@ -649,12 +649,13 @@ public class LivePlayActivity extends BaseActivity {
                         showBottomEpg();
                         showChannelList();
                         break;
-                }else if(tvLeftChannelListLayout.getVisibility()==View.VISIBLE){
-                    if (keyCode==KeyEvent.KEYCODE_DPAD_CENTER
-                        || keyCode==KeyEvent.KEYCODE_ENTER
-                        || keyCode==KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE){
+                    if(tvLeftChannelListLayout.getVisibility()==View.VISIBLE){
+                        if (keyCode==KeyEvent.KEYCODE_DPAD_CENTER
+                            || keyCode==KeyEvent.KEYCODE_ENTER
+                            || keyCode==KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE){
 
-                        hasENTER_pressed=true;
+                            hasENTER_pressed=true;
+                        }
                     }
                 }
             } 
