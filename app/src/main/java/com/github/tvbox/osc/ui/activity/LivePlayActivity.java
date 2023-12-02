@@ -1203,6 +1203,13 @@ public class LivePlayActivity extends BaseActivity {
         if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE){
             if(hasENTER_pressed){
                 // showChannelList();
+                if (currentLiveChannelIndex > -1){
+                    mLiveChannelView.scrollToPosition(currentLiveChannelIndex);
+                }
+                mLiveChannelView.setSelection(currentLiveChannelIndex);
+                mChannelGroupView.scrollToPosition(currentChannelGroupIndex);
+                mChannelGroupView.setSelection(currentChannelGroupIndex);
+
                 mHandler.removeCallbacks(mFocusCurrentChannelAndShowChannelList);
                 mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList,200);
             }
