@@ -371,8 +371,8 @@ public class LivePlayActivity extends BaseActivity {
         initVideoView();
         initChannelGroupView();
         initLiveChannelView();
-        initSettingGroupView();
-        initSettingItemView();
+        // initSettingGroupView();
+        // initSettingItemView();
         initLiveChannelList();
         // initLiveSettingGroupList();
     }
@@ -592,9 +592,9 @@ public class LivePlayActivity extends BaseActivity {
         if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE) {
             mHandler.removeCallbacks(mHideChannelListRun);
             mHandler.post(mHideChannelListRun);
-        } else if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
-            mHandler.removeCallbacks(mHideSettingLayoutRun);
-            mHandler.post(mHideSettingLayoutRun);
+        // } else if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
+        //     mHandler.removeCallbacks(mHideSettingLayoutRun);
+        //     mHandler.post(mHideSettingLayoutRun);
         } else if( backcontroller.getVisibility() == View.VISIBLE){ //
             backcontroller.setVisibility(View.GONE);
         }else if(isBack){
@@ -702,11 +702,11 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void showChannelList() {
-        if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
-            mHandler.removeCallbacks(mHideSettingLayoutRun);
-            mHandler.post(mHideSettingLayoutRun);
-            return;
-        }
+        // if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
+        //     mHandler.removeCallbacks(mHideSettingLayoutRun);
+        //     mHandler.post(mHideSettingLayoutRun);
+        //     return;
+        // }
         if (tvLeftChannelListLayout.getVisibility() == View.INVISIBLE) {
             //重新载入上一次状态
             liveChannelItemAdapter.setNewData(getLiveChannels(currentChannelGroupIndex));
