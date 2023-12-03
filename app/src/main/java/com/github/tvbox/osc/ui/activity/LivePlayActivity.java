@@ -148,7 +148,7 @@ public class LivePlayActivity extends BaseActivity {
     private TextView tv_right_top_channel_name;
     private TextView tv_right_top_epg_name;
     // private TextView tv_right_top_type;
-    private ImageView iv_circle_bg;
+//    private ImageView iv_circle_bg;
     // private TextView tv_shownum ;
     // private TextView txtNoEpg ;
     private ImageView iv_back_bg;
@@ -159,7 +159,7 @@ public class LivePlayActivity extends BaseActivity {
     // private TvRecyclerView mEpgDateGridView;
     private TvRecyclerView mRightEpgList;
     private LiveEpgDateAdapter liveEpgDateAdapter;
-    private LiveEpgAdapter epgListAdapter;
+//    private LiveEpgAdapter epgListAdapter;
 
     private List<LiveDayListGroup> liveDayList = new ArrayList<>();
 
@@ -235,7 +235,7 @@ public class LivePlayActivity extends BaseActivity {
         tv_right_top_channel_name = (TextView)findViewById(R.id.tv_right_top_channel_name);
         tv_right_top_epg_name = (TextView)findViewById(R.id.tv_right_top_epg_name);
         // tv_right_top_type = (TextView)findViewById(R.id.tv_right_top_type);
-        iv_circle_bg = (ImageView) findViewById(R.id.iv_circle_bg);
+//        iv_circle_bg = (ImageView) findViewById(R.id.iv_circle_bg);
         iv_back_bg = (ImageView) findViewById(R.id.iv_back_bg);
         // tv_shownum = (TextView) findViewById(R.id.tv_shownum);
         // txtNoEpg = (TextView) findViewById(R.id.txtNoEpg);
@@ -244,11 +244,11 @@ public class LivePlayActivity extends BaseActivity {
         // divLoadEpg = (View) findViewById(R.id.divLoadEpg);
         // divLoadEpgleft = (View) findViewById(R.id.divLoadEpgleft);
         // divEpg = (LinearLayout) findViewById(R.id.divEPG);
-        //右上角图片旋转
-        objectAnimator = ObjectAnimator.ofFloat(iv_circle_bg,"rotation", 360.0f);
-        objectAnimator.setDuration(5000);
-        objectAnimator.setRepeatCount(-1);
-        objectAnimator.start();
+//        //右上角图片旋转
+//        objectAnimator = ObjectAnimator.ofFloat(iv_circle_bg,"rotation", 360.0f);
+//        objectAnimator.setDuration(5000);
+//        objectAnimator.setRepeatCount(-1);
+//        objectAnimator.start();
 
         //laodao 7day replay
         // mEpgDateGridView = findViewById(R.id.mEpgDateGridView);
@@ -362,9 +362,12 @@ public class LivePlayActivity extends BaseActivity {
                 return false;
             }
         });
+
+        initEpg(); // 取代 initEpgDateView
         // initEpgDateView();
         // initEpgListView();
-        // initDayList();
+
+        initDayList();
         initVideoView();
         initChannelGroupView();
         initLiveChannelView();
@@ -379,8 +382,8 @@ public class LivePlayActivity extends BaseActivity {
     private void showEpg(Date date, ArrayList<Epginfo> arrayList) {
         if (arrayList != null && arrayList.size() > 0) {
             epgdata = arrayList;
-            epgListAdapter.CanBack(currentLiveChannelItem.getinclude_back());
-            epgListAdapter.setNewData(epgdata);
+//            epgListAdapter.CanBack(currentLiveChannelItem.getinclude_back());
+//            epgListAdapter.setNewData(epgdata);
 
             int i = -1;
             int size = epgdata.size() - 1;
@@ -417,7 +420,7 @@ public class LivePlayActivity extends BaseActivity {
             epgTagName = epgInfo[1];
         }
         String finalChannelName = channelName;
-        epgListAdapter.CanBack(currentLiveChannelItem.getinclude_back());
+//        epgListAdapter.CanBack(currentLiveChannelItem.getinclude_back());
         //epgListAdapter.updateData(date, new ArrayList<>());
 
         String url;
@@ -497,9 +500,9 @@ public class LivePlayActivity extends BaseActivity {
                     }
                 }
             }
-            // 存放 可回放 
-            epgListAdapter.CanBack(currentLiveChannelItem.getinclude_back());
-            epgListAdapter.setNewData(arrayList);
+//            // 存放 可回放
+//            epgListAdapter.CanBack(currentLiveChannelItem.getinclude_back());
+//            epgListAdapter.setNewData(arrayList);
         } else {// if 没有 epg 信息
             int selectedIndex = liveEpgDateAdapter.getSelectedIndex();
             if (selectedIndex < 0)
@@ -559,18 +562,18 @@ public class LivePlayActivity extends BaseActivity {
 
     private void updateChannelIcon(String channelName, String logoUrl) {
         // 不用图标
-        return;
-        // if (StringUtils.isEmpty(logoUrl)) {
-        //     liveIconNullBg.setVisibility(View.VISIBLE);
-        //     liveIconNullText.setVisibility(View.VISIBLE);
-        //     imgLiveIcon.setVisibility(View.INVISIBLE);
-        //     liveIconNullText.setText("" + channel_Name.getChannelNum());
-        // } else {
-        //     imgLiveIcon.setVisibility(View.VISIBLE);
-        //     Picasso.get().load(logoUrl).placeholder(R.drawable.app_banner).into(imgLiveIcon);
-        //     liveIconNullBg.setVisibility(View.INVISIBLE);
-        //     liveIconNullText.setVisibility(View.INVISIBLE);
-        // }
+//        return;
+         if (StringUtils.isEmpty(logoUrl)) {
+             liveIconNullBg.setVisibility(View.VISIBLE);
+             liveIconNullText.setVisibility(View.VISIBLE);
+             imgLiveIcon.setVisibility(View.INVISIBLE);
+             liveIconNullText.setText("" + channel_Name.getChannelNum());
+         } else {
+             imgLiveIcon.setVisibility(View.VISIBLE);
+             Picasso.get().load(logoUrl).placeholder(R.drawable.app_banner).into(imgLiveIcon);
+             liveIconNullBg.setVisibility(View.INVISIBLE);
+             liveIconNullText.setVisibility(View.INVISIBLE);
+         }
     }
 
 
@@ -1038,19 +1041,38 @@ public class LivePlayActivity extends BaseActivity {
     //     });
     // }
 
-    // //laoda 生成7天回放日期列表数据
-    // private void initDayList() {
-    //     liveDayList.clear();
-    //     Date firstday = new Date(nowday.getTime() - 6 * 24 * 60 * 60 * 1000);
-    //     for (int i = 0; i < 8; i++) {
-    //         LiveDayListGroup daylist = new LiveDayListGroup();
-    //         Date newday= new Date(firstday.getTime() + i * 24 * 60 * 60 * 1000);
-    //         String day = formatDate1.format(newday);
-    //         daylist.setGroupIndex(i);
-    //         daylist.setGroupName(day);
-    //         liveDayList.add(daylist);
-    //     }
-    // }
+    //laoda 生成7天回放日期列表数据
+    private void initDayList() {
+        liveDayList.clear();
+        Date firstday = new Date(nowday.getTime() - 6 * 24 * 60 * 60 * 1000);
+        for (int i = 0; i < 8; i++) {
+            LiveDayListGroup daylist = new LiveDayListGroup();
+            Date newday= new Date(firstday.getTime() + i * 24 * 60 * 60 * 1000);
+            String day = formatDate1.format(newday);
+            daylist.setGroupIndex(i);
+            daylist.setGroupName(day);
+            liveDayList.add(daylist);
+        }
+    }
+
+    private void initEpg() {
+        liveEpgDateAdapter = new LiveEpgDateAdapter();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        SimpleDateFormat datePresentFormat = new SimpleDateFormat("MM-dd");
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        for (int i = 0; i < 8; i++) {
+            Date dateIns = calendar.getTime();
+            LiveEpgDate epgDate = new LiveEpgDate();
+            epgDate.setIndex(i);
+            epgDate.setDatePresented(datePresentFormat.format(dateIns));
+            epgDate.setDateParamVal(dateIns);
+            liveEpgDateAdapter.addData(epgDate);
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+        }
+        liveEpgDateAdapter.setSelectedIndex(1);
+    }
+
 
     // //kens 7天回放数据绑定和展示
     // private void initEpgDateView() {
