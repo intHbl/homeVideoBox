@@ -147,7 +147,7 @@ public class LivePlayActivity extends BaseActivity {
 
     private TextView tv_right_top_channel_name;
     private TextView tv_right_top_epg_name;
-    private TextView tv_right_top_type;
+    // private TextView tv_right_top_type;
     private ImageView iv_circle_bg;
     // private TextView tv_shownum ;
     // private TextView txtNoEpg ;
@@ -234,7 +234,7 @@ public class LivePlayActivity extends BaseActivity {
         tv_right_top_source_index = (TextView)findViewById(R.id.tv_right_top_source_index);
         tv_right_top_channel_name = (TextView)findViewById(R.id.tv_right_top_channel_name);
         tv_right_top_epg_name = (TextView)findViewById(R.id.tv_right_top_epg_name);
-//        tv_right_top_type = (TextView)findViewById(R.id.tv_right_top_type);
+        // tv_right_top_type = (TextView)findViewById(R.id.tv_right_top_type);
         iv_circle_bg = (ImageView) findViewById(R.id.iv_circle_bg);
         iv_back_bg = (ImageView) findViewById(R.id.iv_back_bg);
         // tv_shownum = (TextView) findViewById(R.id.tv_shownum);
@@ -1355,6 +1355,7 @@ public class LivePlayActivity extends BaseActivity {
         }
     }
 
+    // 被 init 调用
     private void initLiveChannelList() {
         List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
         if (list.isEmpty()) {
@@ -1373,6 +1374,7 @@ public class LivePlayActivity extends BaseActivity {
         }
     }
 
+    // 被 initLiveChannelList 调用
     public void loadProxyLives(String url) {
         try {
             Uri parsedUrl = Uri.parse(url);
@@ -1418,6 +1420,7 @@ public class LivePlayActivity extends BaseActivity {
         });
     }
 
+    // 初始化, 被 initLiveChannelList || loadProxyLives 调用
     private void initLiveState() {
         String lastChannelName = Hawk.get(HawkConfig.LIVE_CHANNEL, "");
 
@@ -1440,12 +1443,16 @@ public class LivePlayActivity extends BaseActivity {
             lastLiveChannelIndex = 0;
         }
 
+        //播放器
         livePlayerManager.init(mVideoView);
-
+        //时钟
         showTime();
+        //网速
         showNetSpeed();
+        //左侧 频道: 组,列表
         tvLeftChannelListLayout.setVisibility(View.INVISIBLE);
         liveChannelGroupAdapter.setNewData(liveChannelGroupList);
+
         selectChannelGroup(lastChannelGroupIndex, false, lastLiveChannelIndex);
     }
 
@@ -1524,12 +1531,15 @@ public class LivePlayActivity extends BaseActivity {
         // TODO here !!!!
         liveChannelItemAdapter.setNewData(getLiveChannels(groupIndex));
         if (groupIndex == currentChannelGroupIndex) {
-            if (currentLiveChannelIndex > -1)
+            // 当前组
+            if (currentLiveChannelIndex > -1){
                 mLiveChannelView.scrollToPosition(currentLiveChannelIndex);
+            }
             liveChannelItemAdapter.setSelectedChannelIndex(currentLiveChannelIndex);
-        }
-        else {
+        } else {
+            // 非当前组
             mLiveChannelView.scrollToPosition(0);
+            //-1 == 不通知.
             liveChannelItemAdapter.setSelectedChannelIndex(-1);
         }
 
@@ -1537,6 +1547,7 @@ public class LivePlayActivity extends BaseActivity {
             clickLiveChannel(liveChannelIndex);
             mChannelGroupView.scrollToPosition(groupIndex);
             mLiveChannelView.scrollToPosition(liveChannelIndex);
+            // playChannel: group channel isChangeSource
             playChannel(groupIndex, liveChannelIndex, false);
         }
     }
@@ -1636,6 +1647,7 @@ public class LivePlayActivity extends BaseActivity {
         long diff = (eTime - sTime) / 1000;
         return diff;
     }
+
     private  String durationToString(int duration) {
         String result = "";
         int dur = duration / 1000;
@@ -1674,6 +1686,7 @@ public class LivePlayActivity extends BaseActivity {
         return result;
     }
 
+    // 这个 不用管了.  回放.
     public void showProgressBars( boolean show){
 
         sBar.requestFocus();
@@ -1760,6 +1773,7 @@ public class LivePlayActivity extends BaseActivity {
                 return false;
             }
         });
+
         if(mVideoView.isPlaying()){
             iv_play.setVisibility(View.INVISIBLE);
             iv_playpause.setBackground(ContextCompat.getDrawable(LivePlayActivity.context, R.drawable.vod_pause));
@@ -1789,6 +1803,6 @@ public class LivePlayActivity extends BaseActivity {
             countDownTimer3.cancel();
         }
         countDownTimer3.start();
-    }
+    } // 回放end
 
 }

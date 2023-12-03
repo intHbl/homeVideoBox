@@ -42,6 +42,7 @@ public class LiveChannelItemAdapter extends BaseQuickAdapter<LiveChannelItem, Ba
 
     public void setSelectedChannelIndex(int selectedChannelIndex) {
         if (selectedChannelIndex == this.selectedChannelIndex) return;
+        
         int preSelectedChannelIndex = this.selectedChannelIndex;
         this.selectedChannelIndex = selectedChannelIndex;
         if (preSelectedChannelIndex != -1)
