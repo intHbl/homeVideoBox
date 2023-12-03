@@ -571,19 +571,19 @@ public class LivePlayActivity extends BaseActivity {
 
     //频道列表
     public  void divLoadEpgRight(View view) {
-        mChannelGroupView.setVisibility(View.GONE);
-        divEpg.setVisibility(View.VISIBLE);
-        divLoadEpgleft.setVisibility(View.VISIBLE);
-        divLoadEpg.setVisibility(View.GONE);
-        mRightEpgList.setSelectedPosition(epgListAdapter.getSelectedIndex());
-        epgListAdapter.notifyDataSetChanged();
+        // mChannelGroupView.setVisibility(View.GONE);
+        // divEpg.setVisibility(View.VISIBLE);
+        // divLoadEpgleft.setVisibility(View.VISIBLE);
+        // divLoadEpg.setVisibility(View.GONE);
+        // mRightEpgList.setSelectedPosition(epgListAdapter.getSelectedIndex());
+        // epgListAdapter.notifyDataSetChanged();
     }
     //频道列表
     public  void divLoadEpgLeft(View view) {
-        mChannelGroupView.setVisibility(View.VISIBLE);
-        divEpg.setVisibility(View.GONE);
-        divLoadEpgleft.setVisibility(View.GONE);
-        divLoadEpg.setVisibility(View.GONE);
+        // mChannelGroupView.setVisibility(View.VISIBLE);
+        // divEpg.setVisibility(View.GONE);
+        // divLoadEpgleft.setVisibility(View.GONE);
+        // divLoadEpg.setVisibility(View.GONE);
     }
 
 
@@ -710,16 +710,19 @@ public class LivePlayActivity extends BaseActivity {
         if (tvLeftChannelListLayout.getVisibility() == View.INVISIBLE) {
             //重新载入上一次状态
             liveChannelItemAdapter.setNewData(getLiveChannels(currentChannelGroupIndex));
+            if (currentLiveChannelIndex > -1)
+                mLiveChannelView.scrollToPosition(currentLiveChannelIndex);
+            mLiveChannelView.setSelection(currentLiveChannelIndex);
+            mChannelGroupView.scrollToPosition(currentChannelGroupIndex);
+            mChannelGroupView.setSelection(currentChannelGroupIndex);
+            mHandler.removeCallbacks(mHideChannelListRun);
+            mHandler.removeCallbacks(mFocusCurrentChannelAndShowChannelList);
+            mHandler.post(mFocusCurrentChannelAndShowChannelList);
+            mHandler.postDelayed(mHideChannelListRun,5000);
         }
-        if (currentLiveChannelIndex > -1)
-            mLiveChannelView.scrollToPosition(currentLiveChannelIndex);
-        mLiveChannelView.setSelection(currentLiveChannelIndex);
-        mChannelGroupView.scrollToPosition(currentChannelGroupIndex);
-        mChannelGroupView.setSelection(currentChannelGroupIndex);
-        mHandler.postDelayed(mFocusCurrentChannelAndShowChannelList, 200);
+       
 
-        mHandler.removeCallbacks(mHideChannelListRun);
-        mHandler.postDelayed(mHideChannelListRun,5000);
+
         // } else {
         //     mHandler.removeCallbacks(mHideChannelListRun);
         //     // mHandler.post(mHideChannelListRun);
@@ -734,6 +737,7 @@ public class LivePlayActivity extends BaseActivity {
             if (mChannelGroupView.isScrolling() || mLiveChannelView.isScrolling() || mChannelGroupView.isComputingLayout() || mLiveChannelView.isComputingLayout()) {
                 mHandler.postDelayed(this, 100);
             } else {
+                // TODO
                 liveChannelGroupAdapter.setSelectedGroupIndex(currentChannelGroupIndex);
                 liveChannelItemAdapter.setSelectedChannelIndex(currentLiveChannelIndex);
                 RecyclerView.ViewHolder holder = mLiveChannelView.findViewHolderForAdapterPosition(currentLiveChannelIndex);
@@ -793,17 +797,17 @@ public class LivePlayActivity extends BaseActivity {
         }
         tvChannelInfo.setLayoutParams(lParams);
 
-        // tvChannelInfo.setVisibility(View.VISIBLE);
-        mHandler.removeCallbacks(mHideChannelInfoRun);
-        mHandler.postDelayed(mHideChannelInfoRun, 3000);
+        // // tvChannelInfo.setVisibility(View.VISIBLE);
+        // mHandler.removeCallbacks(mHideChannelInfoRun);
+        // mHandler.postDelayed(mHideChannelInfoRun, 3000);
     }
 
-    private Runnable mHideChannelInfoRun = new Runnable() {
-        @Override
-        public void run() {
-            // tvChannelInfo.setVisibility(View.INVISIBLE);
-        }
-    };
+    // private Runnable mHideChannelInfoRun = new Runnable() {
+    //     @Override
+    //     public void run() {
+    //         // tvChannelInfo.setVisibility(View.INVISIBLE);
+    //     }
+    // };
 
     private boolean playChannel(int channelGroupIndex, int liveChannelIndex, boolean changeSource) {
         if ((channelGroupIndex == currentChannelGroupIndex && liveChannelIndex == currentLiveChannelIndex && !changeSource)
@@ -869,52 +873,52 @@ public class LivePlayActivity extends BaseActivity {
 
     //显示设置列表
     private void showSettingGroup() {
-        if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE) {
-            mHandler.removeCallbacks(mHideChannelListRun);
-            mHandler.post(mHideChannelListRun);
-        }
-        if (tvRightSettingLayout.getVisibility() == View.INVISIBLE) {
-            if (!isCurrentLiveChannelValid()) return;
-            //重新载入默认状态
-            loadCurrentSourceList();
-            liveSettingGroupAdapter.setNewData(liveSettingGroupList);
-            selectSettingGroup(0, false);
-            mSettingGroupView.scrollToPosition(0);
-            mSettingItemView.scrollToPosition(currentLiveChannelItem.getSourceIndex());
-            mHandler.postDelayed(mFocusAndShowSettingGroup, 200);
-        } else {
-            mHandler.removeCallbacks(mHideSettingLayoutRun);
-            mHandler.post(mHideSettingLayoutRun);
-        }
+        // if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE) {
+        //     mHandler.removeCallbacks(mHideChannelListRun);
+        //     mHandler.post(mHideChannelListRun);
+        // }
+        // if (tvRightSettingLayout.getVisibility() == View.INVISIBLE) {
+        //     if (!isCurrentLiveChannelValid()) return;
+        //     //重新载入默认状态
+        //     loadCurrentSourceList();
+        //     liveSettingGroupAdapter.setNewData(liveSettingGroupList);
+        //     selectSettingGroup(0, false);
+        //     mSettingGroupView.scrollToPosition(0);
+        //     mSettingItemView.scrollToPosition(currentLiveChannelItem.getSourceIndex());
+        //     mHandler.postDelayed(mFocusAndShowSettingGroup, 200);
+        // } else {
+        //     mHandler.removeCallbacks(mHideSettingLayoutRun);
+        //     mHandler.post(mHideSettingLayoutRun);
+        // }
     }
 
-    private Runnable mFocusAndShowSettingGroup = new Runnable() {
-        @Override
-        public void run() {
-            if (mSettingGroupView.isScrolling() || mSettingItemView.isScrolling() || mSettingGroupView.isComputingLayout() || mSettingItemView.isComputingLayout()) {
-                mHandler.postDelayed(this, 100);
-            } else {
-                RecyclerView.ViewHolder holder = mSettingGroupView.findViewHolderForAdapterPosition(0);
-                if (holder != null)
-                    holder.itemView.requestFocus();
-                tvRightSettingLayout.setVisibility(View.VISIBLE);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tvRightSettingLayout.getLayoutParams();
-                if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
-                    ViewObj viewObj = new ViewObj(tvRightSettingLayout, params);
-                    ObjectAnimator animator = ObjectAnimator.ofObject(viewObj, "marginRight", new IntEvaluator(), -tvRightSettingLayout.getLayoutParams().width, 0);
-                    animator.setDuration(200);
-                    animator.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            mHandler.postDelayed(mHideSettingLayoutRun, 5000);
-                        }
-                    });
-                    animator.start();
-                }
-            }
-        }
-    };
+    // private Runnable mFocusAndShowSettingGroup = new Runnable() {
+    //     @Override
+    //     public void run() {
+    //         if (mSettingGroupView.isScrolling() || mSettingItemView.isScrolling() || mSettingGroupView.isComputingLayout() || mSettingItemView.isComputingLayout()) {
+    //             mHandler.postDelayed(this, 100);
+    //         } else {
+    //             RecyclerView.ViewHolder holder = mSettingGroupView.findViewHolderForAdapterPosition(0);
+    //             if (holder != null)
+    //                 holder.itemView.requestFocus();
+    //             tvRightSettingLayout.setVisibility(View.VISIBLE);
+    //             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tvRightSettingLayout.getLayoutParams();
+    //             if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
+    //                 ViewObj viewObj = new ViewObj(tvRightSettingLayout, params);
+    //                 ObjectAnimator animator = ObjectAnimator.ofObject(viewObj, "marginRight", new IntEvaluator(), -tvRightSettingLayout.getLayoutParams().width, 0);
+    //                 animator.setDuration(200);
+    //                 animator.addListener(new AnimatorListenerAdapter() {
+    //                     @Override
+    //                     public void onAnimationEnd(Animator animation) {
+    //                         super.onAnimationEnd(animation);
+    //                         mHandler.postDelayed(mHideSettingLayoutRun, 5000);
+    //                     }
+    //                 });
+    //                 animator.start();
+    //             }
+    //         }
+    //     }
+    // };
 
     private Runnable mHideSettingLayoutRun = new Runnable() {
         @Override
@@ -997,7 +1001,7 @@ public class LivePlayActivity extends BaseActivity {
                 } else if(shiyiUrl.indexOf("PLTV/8888") !=-1){
 
                     mHandler.removeCallbacks(mHideChannelListRun);
-                    mHandler.postDelayed(mHideChannelListRun, 100);
+                    mHandler.postDelayed(mHideChannelListRun, 500);
                     mVideoView.release();
                     shiyi_time = shiyiStartdate + "-" + shiyiEnddate;
                     isSHIYI = true;
@@ -1072,7 +1076,7 @@ public class LivePlayActivity extends BaseActivity {
 
                 } else if(shiyiUrl.indexOf("PLTV/8888") !=-1){
                     mHandler.removeCallbacks(mHideChannelListRun);
-                    mHandler.postDelayed(mHideChannelListRun, 100);
+                    mHandler.postDelayed(mHideChannelListRun, 500);
 
                     mVideoView.release();
                     shiyi_time = shiyiStartdate + "-" + shiyiEnddate;
@@ -1829,6 +1833,7 @@ public class LivePlayActivity extends BaseActivity {
     }
 
     private void loadChannelGroupDataAndPlay(int groupIndex, int liveChannelIndex) {
+        // TODO here !!!!
         liveChannelItemAdapter.setNewData(getLiveChannels(groupIndex));
         if (groupIndex == currentChannelGroupIndex) {
             if (currentLiveChannelIndex > -1)
