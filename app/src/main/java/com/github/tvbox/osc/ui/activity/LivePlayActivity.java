@@ -38,15 +38,15 @@ import com.github.tvbox.osc.bean.LiveChannelItem;
 import com.github.tvbox.osc.bean.LiveDayListGroup;
 import com.github.tvbox.osc.bean.LiveEpgDate;
 import com.github.tvbox.osc.bean.LivePlayerManager;
-import com.github.tvbox.osc.bean.LiveSettingGroup;
-import com.github.tvbox.osc.bean.LiveSettingItem;
+// import com.github.tvbox.osc.bean.LiveSettingGroup;
+// import com.github.tvbox.osc.bean.LiveSettingItem;
 import com.github.tvbox.osc.player.controller.LiveController;
 import com.github.tvbox.osc.ui.adapter.LiveChannelGroupAdapter;
 import com.github.tvbox.osc.ui.adapter.LiveChannelItemAdapter;
 import com.github.tvbox.osc.ui.adapter.LiveEpgAdapter;
 import com.github.tvbox.osc.ui.adapter.LiveEpgDateAdapter;
-import com.github.tvbox.osc.ui.adapter.LiveSettingGroupAdapter;
-import com.github.tvbox.osc.ui.adapter.LiveSettingItemAdapter;
+// import com.github.tvbox.osc.ui.adapter.LiveSettingGroupAdapter;
+// import com.github.tvbox.osc.ui.adapter.LiveSettingItemAdapter;
 import com.github.tvbox.osc.ui.adapter.MyEpgAdapter;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ChannelListView;
@@ -112,9 +112,9 @@ public class LivePlayActivity extends BaseActivity {
     private LinearLayout tvRightSettingLayout;
     private TvRecyclerView mSettingGroupView;
     private TvRecyclerView mSettingItemView;
-    private LiveSettingGroupAdapter liveSettingGroupAdapter;
-    private LiveSettingItemAdapter liveSettingItemAdapter;
-    private List<LiveSettingGroup> liveSettingGroupList = new ArrayList<>();
+    // private LiveSettingGroupAdapter liveSettingGroupAdapter;
+    // private LiveSettingItemAdapter liveSettingItemAdapter;
+    // private List<LiveSettingGroup> liveSettingGroupList = new ArrayList<>();
 
     public static  int currentChannelGroupIndex = 0;
     private Handler mHandler = new Handler();
@@ -374,7 +374,7 @@ public class LivePlayActivity extends BaseActivity {
         initSettingGroupView();
         initSettingItemView();
         initLiveChannelList();
-        initLiveSettingGroupList();
+        // initLiveSettingGroupList();
     }
     //获取EPG并存储 // 百川epg  DIYP epg   51zmt epg ------- 自建EPG格式输出格式请参考 51zmt
     private List<Epginfo> epgdata = new ArrayList<>();
@@ -615,7 +615,7 @@ public class LivePlayActivity extends BaseActivity {
             if (keyCode == KeyEvent.KEYCODE_MENU) {
                 // 不显示 配置.
                 //showSettingGroup();
-            } else if (!isListOrSettingLayoutVisible()) {
+            } else if (!isChannelListLayoutVisible()) {
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_DPAD_UP:
                         // XXTODO 上下键 
@@ -871,8 +871,8 @@ public class LivePlayActivity extends BaseActivity {
         playChannel(currentChannelGroupIndex, currentLiveChannelIndex, true);
     }
 
-    //显示设置列表
-    private void showSettingGroup() {
+    // //显示设置列表
+    // private void showSettingGroup() {
         // if (tvLeftChannelListLayout.getVisibility() == View.VISIBLE) {
         //     mHandler.removeCallbacks(mHideChannelListRun);
         //     mHandler.post(mHideChannelListRun);
@@ -890,7 +890,7 @@ public class LivePlayActivity extends BaseActivity {
         //     mHandler.removeCallbacks(mHideSettingLayoutRun);
         //     mHandler.post(mHideSettingLayoutRun);
         // }
-    }
+    // }
 
     // private Runnable mFocusAndShowSettingGroup = new Runnable() {
     //     @Override
@@ -920,26 +920,26 @@ public class LivePlayActivity extends BaseActivity {
     //     }
     // };
 
-    private Runnable mHideSettingLayoutRun = new Runnable() {
-        @Override
-        public void run() {
-            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tvRightSettingLayout.getLayoutParams();
-            if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
-                ViewObj viewObj = new ViewObj(tvRightSettingLayout, params);
-                ObjectAnimator animator = ObjectAnimator.ofObject(viewObj, "marginRight", new IntEvaluator(), 0, -tvRightSettingLayout.getLayoutParams().width);
-                animator.setDuration(200);
-                animator.addListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-                        tvRightSettingLayout.setVisibility(View.INVISIBLE);
-                        liveSettingGroupAdapter.setSelectedGroupIndex(-1);
-                    }
-                });
-                animator.start();
-            }
-        }
-    };
+    // private Runnable mHideSettingLayoutRun = new Runnable() {
+    //     @Override
+    //     public void run() {
+    //         ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) tvRightSettingLayout.getLayoutParams();
+    //         if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {
+    //             ViewObj viewObj = new ViewObj(tvRightSettingLayout, params);
+    //             ObjectAnimator animator = ObjectAnimator.ofObject(viewObj, "marginRight", new IntEvaluator(), 0, -tvRightSettingLayout.getLayoutParams().width);
+    //             animator.setDuration(200);
+    //             animator.addListener(new AnimatorListenerAdapter() {
+    //                 @Override
+    //                 public void onAnimationEnd(Animator animation) {
+    //                     super.onAnimationEnd(animation);
+    //                     tvRightSettingLayout.setVisibility(View.INVISIBLE);
+    //                     liveSettingGroupAdapter.setSelectedGroupIndex(-1);
+    //                 }
+    //             });
+    //             animator.start();
+    //         }
+    //     }
+    // };
 
     //laodao 7天Epg数据绑定和展示
     private void initEpgListView() {
@@ -1437,124 +1437,124 @@ public class LivePlayActivity extends BaseActivity {
         }
     }
 
-    private void initSettingGroupView() {
-        mSettingGroupView.setHasFixedSize(true);
-        mSettingGroupView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+    // private void initSettingGroupView() {
+    //     mSettingGroupView.setHasFixedSize(true);
+    //     mSettingGroupView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
 
-        liveSettingGroupAdapter = new LiveSettingGroupAdapter();
-        mSettingGroupView.setAdapter(liveSettingGroupAdapter);
-        mSettingGroupView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                mHandler.removeCallbacks(mHideSettingLayoutRun);
-                mHandler.postDelayed(mHideSettingLayoutRun, 5000);
-            }
-        });
+    //     liveSettingGroupAdapter = new LiveSettingGroupAdapter();
+    //     mSettingGroupView.setAdapter(liveSettingGroupAdapter);
+    //     mSettingGroupView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    //         @Override
+    //         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+    //             super.onScrollStateChanged(recyclerView, newState);
+    //             mHandler.removeCallbacks(mHideSettingLayoutRun);
+    //             mHandler.postDelayed(mHideSettingLayoutRun, 5000);
+    //         }
+    //     });
 
-        //电视
-        mSettingGroupView.setOnItemListener(new TvRecyclerView.OnItemListener() {
-            @Override
-            public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-            }
+    //     //电视
+    //     mSettingGroupView.setOnItemListener(new TvRecyclerView.OnItemListener() {
+    //         @Override
+    //         public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
+    //         }
 
-            @Override
-            public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                selectSettingGroup(position, true);
-            }
+    //         @Override
+    //         public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
+    //             selectSettingGroup(position, true);
+    //         }
 
-            @Override
-            public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-            }
-        });
+    //         @Override
+    //         public void onItemClick(TvRecyclerView parent, View itemView, int position) {
+    //         }
+    //     });
 
-        //手机/模拟器
-        liveSettingGroupAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FastClickCheckUtil.check(view);
-                selectSettingGroup(position, false);
-            }
-        });
-    }
+    //     //手机/模拟器
+    //     liveSettingGroupAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+    //         @Override
+    //         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+    //             FastClickCheckUtil.check(view);
+    //             selectSettingGroup(position, false);
+    //         }
+    //     });
+    // }
 
-    private void selectSettingGroup(int position, boolean focus) {
-        if (!isCurrentLiveChannelValid()) return;
-        if (focus) {
-            liveSettingGroupAdapter.setFocusedGroupIndex(position);
-            liveSettingItemAdapter.setFocusedItemIndex(-1);
-        }
-        if (position == liveSettingGroupAdapter.getSelectedGroupIndex() || position < -1)
-            return;
+    // private void selectSettingGroup(int position, boolean focus) {
+    //     if (!isCurrentLiveChannelValid()) return;
+    //     if (focus) {
+    //         liveSettingGroupAdapter.setFocusedGroupIndex(position);
+    //         liveSettingItemAdapter.setFocusedItemIndex(-1);
+    //     }
+    //     if (position == liveSettingGroupAdapter.getSelectedGroupIndex() || position < -1)
+    //         return;
 
-        liveSettingGroupAdapter.setSelectedGroupIndex(position);
-        liveSettingItemAdapter.setNewData(liveSettingGroupList.get(position).getLiveSettingItems());
+    //     liveSettingGroupAdapter.setSelectedGroupIndex(position);
+    //     liveSettingItemAdapter.setNewData(liveSettingGroupList.get(position).getLiveSettingItems());
 
-        switch (position) {
-            case 0:
-                liveSettingItemAdapter.selectItem(currentLiveChannelItem.getSourceIndex(), true, false);
-                break;
-            case 1:
-                liveSettingItemAdapter.selectItem(livePlayerManager.getLivePlayerScale(), true, true);
-                break;
-            case 2:
-                liveSettingItemAdapter.selectItem(livePlayerManager.getLivePlayerType(), true, true);
-                break;
-        }
-        int scrollToPosition = liveSettingItemAdapter.getSelectedItemIndex();
-        if (scrollToPosition < 0) scrollToPosition = 0;
-        mSettingItemView.scrollToPosition(scrollToPosition);
-        mHandler.removeCallbacks(mHideSettingLayoutRun);
-        mHandler.postDelayed(mHideSettingLayoutRun, 5000);
-    }
+    //     switch (position) {
+    //         case 0:
+    //             liveSettingItemAdapter.selectItem(currentLiveChannelItem.getSourceIndex(), true, false);
+    //             break;
+    //         case 1:
+    //             liveSettingItemAdapter.selectItem(livePlayerManager.getLivePlayerScale(), true, true);
+    //             break;
+    //         case 2:
+    //             liveSettingItemAdapter.selectItem(livePlayerManager.getLivePlayerType(), true, true);
+    //             break;
+    //     }
+    //     int scrollToPosition = liveSettingItemAdapter.getSelectedItemIndex();
+    //     if (scrollToPosition < 0) scrollToPosition = 0;
+    //     mSettingItemView.scrollToPosition(scrollToPosition);
+    //     mHandler.removeCallbacks(mHideSettingLayoutRun);
+    //     mHandler.postDelayed(mHideSettingLayoutRun, 5000);
+    // }
 
-    private void initSettingItemView() {
-        mSettingItemView.setHasFixedSize(true);
-        mSettingItemView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
+    // private void initSettingItemView() {
+    //     mSettingItemView.setHasFixedSize(true);
+    //     mSettingItemView.setLayoutManager(new V7LinearLayoutManager(this.mContext, 1, false));
 
-        liveSettingItemAdapter = new LiveSettingItemAdapter();
-        mSettingItemView.setAdapter(liveSettingItemAdapter);
-        mSettingItemView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                mHandler.removeCallbacks(mHideSettingLayoutRun);
-                mHandler.postDelayed(mHideSettingLayoutRun, 5000);
-            }
-        });
+    //     liveSettingItemAdapter = new LiveSettingItemAdapter();
+    //     mSettingItemView.setAdapter(liveSettingItemAdapter);
+    //     mSettingItemView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+    //         @Override
+    //         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+    //             super.onScrollStateChanged(recyclerView, newState);
+    //             mHandler.removeCallbacks(mHideSettingLayoutRun);
+    //             mHandler.postDelayed(mHideSettingLayoutRun, 5000);
+    //         }
+    //     });
 
-        //电视
-        mSettingItemView.setOnItemListener(new TvRecyclerView.OnItemListener() {
-            @Override
-            public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
-            }
+    //     //电视
+    //     mSettingItemView.setOnItemListener(new TvRecyclerView.OnItemListener() {
+    //         @Override
+    //         public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
+    //         }
 
-            @Override
-            public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
-                if (position < 0) return;
-                liveSettingGroupAdapter.setFocusedGroupIndex(-1);
-                liveSettingItemAdapter.setFocusedItemIndex(position);
-                mHandler.removeCallbacks(mHideSettingLayoutRun);
-                mHandler.postDelayed(mHideSettingLayoutRun, 5000);
-            }
+    //         @Override
+    //         public void onItemSelected(TvRecyclerView parent, View itemView, int position) {
+    //             if (position < 0) return;
+    //             liveSettingGroupAdapter.setFocusedGroupIndex(-1);
+    //             liveSettingItemAdapter.setFocusedItemIndex(position);
+    //             mHandler.removeCallbacks(mHideSettingLayoutRun);
+    //             mHandler.postDelayed(mHideSettingLayoutRun, 5000);
+    //         }
 
-            @Override
-            public void onItemClick(TvRecyclerView parent, View itemView, int position) {
-                clickSettingItem(position);
-            }
-        });
+    //         @Override
+    //         public void onItemClick(TvRecyclerView parent, View itemView, int position) {
+    //             clickSettingItem(position);
+    //         }
+    //     });
 
-        //手机/模拟器
-        liveSettingItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FastClickCheckUtil.check(view);
-                clickSettingItem(position);
-            }
-        });
-    }
+    //     //手机/模拟器
+    //     liveSettingItemAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+    //         @Override
+    //         public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+    //             FastClickCheckUtil.check(view);
+    //             clickSettingItem(position);
+    //         }
+    //     });
+    // }
 
-    private void clickSettingItem(int position) {
+    // private void clickSettingItem(int position) {
         // int settingGroupIndex = liveSettingGroupAdapter.getSelectedGroupIndex();
         // if (settingGroupIndex < 4) {
         //     if (position == liveSettingItemAdapter.getSelectedItemIndex())
@@ -1605,7 +1605,7 @@ public class LivePlayActivity extends BaseActivity {
         // }
         // mHandler.removeCallbacks(mHideSettingLayoutRun);
         // mHandler.postDelayed(mHideSettingLayoutRun, 5000);
-    }
+    // }
 
     private void initLiveChannelList() {
         List<LiveChannelGroup> list = ApiConfig.get().getChannelGroupList();
@@ -1697,62 +1697,66 @@ public class LivePlayActivity extends BaseActivity {
         showTime();
         showNetSpeed();
         tvLeftChannelListLayout.setVisibility(View.INVISIBLE);
-        tvRightSettingLayout.setVisibility(View.INVISIBLE);
+        // tvRightSettingLayout.setVisibility(View.INVISIBLE);
 
         liveChannelGroupAdapter.setNewData(liveChannelGroupList);
         selectChannelGroup(lastChannelGroupIndex, false, lastLiveChannelIndex);
     }
 
-    private boolean isListOrSettingLayoutVisible() {
-        return tvLeftChannelListLayout.getVisibility() == View.VISIBLE || tvRightSettingLayout.getVisibility() == View.VISIBLE;
+    private boolean isChannelListLayoutVisible() {
+        return tvLeftChannelListLayout.getVisibility() == View.VISIBLE;
     }
 
-    private void initLiveSettingGroupList() {
-        ArrayList<String> groupNames = new ArrayList<>(Arrays.asList("线路选择", "画面比例", "播放解码", "超时换源", "偏好设置"));
-        ArrayList<ArrayList<String>> itemsArrayList = new ArrayList<>();
-        ArrayList<String> sourceItems = new ArrayList<>();
-        ArrayList<String> scaleItems = new ArrayList<>(Arrays.asList("默认", "16:9", "4:3", "填充", "原始", "裁剪"));
-        ArrayList<String> playerDecoderItems = new ArrayList<>(Arrays.asList("系统", "ijk硬解", "ijk软解", "exo"));
-        ArrayList<String> timeoutItems = new ArrayList<>(Arrays.asList("5s", "10s", "15s", "20s", "25s", "30s"));
-        ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速", "换台反转", "跨选分类"));
-        itemsArrayList.add(sourceItems);
-        itemsArrayList.add(scaleItems);
-        itemsArrayList.add(playerDecoderItems);
-        itemsArrayList.add(timeoutItems);
-        itemsArrayList.add(personalSettingItems);
+    // private boolean isListOrSettingLayoutVisible() {
+    //     return tvLeftChannelListLayout.getVisibility() == View.VISIBLE || tvRightSettingLayout.getVisibility() == View.VISIBLE;
+    // }
 
-        liveSettingGroupList.clear();
-        for (int i = 0; i < groupNames.size(); i++) {
-            LiveSettingGroup liveSettingGroup = new LiveSettingGroup();
-            ArrayList<LiveSettingItem> liveSettingItemList = new ArrayList<>();
-            liveSettingGroup.setGroupIndex(i);
-            liveSettingGroup.setGroupName(groupNames.get(i));
-            for (int j = 0; j < itemsArrayList.get(i).size(); j++) {
-                LiveSettingItem liveSettingItem = new LiveSettingItem();
-                liveSettingItem.setItemIndex(j);
-                liveSettingItem.setItemName(itemsArrayList.get(i).get(j));
-                liveSettingItemList.add(liveSettingItem);
-            }
-            liveSettingGroup.setLiveSettingItems(liveSettingItemList);
-            liveSettingGroupList.add(liveSettingGroup);
-        }
-        liveSettingGroupList.get(3).getLiveSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1)).setItemSelected(true);
-        liveSettingGroupList.get(4).getLiveSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_TIME, false));
-        liveSettingGroupList.get(4).getLiveSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false));
-        liveSettingGroupList.get(4).getLiveSettingItems().get(2).setItemSelected(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false));
-        liveSettingGroupList.get(4).getLiveSettingItems().get(3).setItemSelected(Hawk.get(HawkConfig.LIVE_CROSS_GROUP, false));
-    }
+    // private void initLiveSettingGroupList() {
+    //     ArrayList<String> groupNames = new ArrayList<>(Arrays.asList("线路选择", "画面比例", "播放解码", "超时换源", "偏好设置"));
+    //     ArrayList<ArrayList<String>> itemsArrayList = new ArrayList<>();
+    //     ArrayList<String> sourceItems = new ArrayList<>();
+    //     ArrayList<String> scaleItems = new ArrayList<>(Arrays.asList("默认", "16:9", "4:3", "填充", "原始", "裁剪"));
+    //     ArrayList<String> playerDecoderItems = new ArrayList<>(Arrays.asList("系统", "ijk硬解", "ijk软解", "exo"));
+    //     ArrayList<String> timeoutItems = new ArrayList<>(Arrays.asList("5s", "10s", "15s", "20s", "25s", "30s"));
+    //     ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速", "换台反转", "跨选分类"));
+    //     itemsArrayList.add(sourceItems);
+    //     itemsArrayList.add(scaleItems);
+    //     itemsArrayList.add(playerDecoderItems);
+    //     itemsArrayList.add(timeoutItems);
+    //     itemsArrayList.add(personalSettingItems);
+
+    //     liveSettingGroupList.clear();
+    //     for (int i = 0; i < groupNames.size(); i++) {
+    //         LiveSettingGroup liveSettingGroup = new LiveSettingGroup();
+    //         ArrayList<LiveSettingItem> liveSettingItemList = new ArrayList<>();
+    //         liveSettingGroup.setGroupIndex(i);
+    //         liveSettingGroup.setGroupName(groupNames.get(i));
+    //         for (int j = 0; j < itemsArrayList.get(i).size(); j++) {
+    //             LiveSettingItem liveSettingItem = new LiveSettingItem();
+    //             liveSettingItem.setItemIndex(j);
+    //             liveSettingItem.setItemName(itemsArrayList.get(i).get(j));
+    //             liveSettingItemList.add(liveSettingItem);
+    //         }
+    //         liveSettingGroup.setLiveSettingItems(liveSettingItemList);
+    //         liveSettingGroupList.add(liveSettingGroup);
+    //     }
+    //     liveSettingGroupList.get(3).getLiveSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1)).setItemSelected(true);
+    //     liveSettingGroupList.get(4).getLiveSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_TIME, false));
+    //     liveSettingGroupList.get(4).getLiveSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false));
+    //     liveSettingGroupList.get(4).getLiveSettingItems().get(2).setItemSelected(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false));
+    //     liveSettingGroupList.get(4).getLiveSettingItems().get(3).setItemSelected(Hawk.get(HawkConfig.LIVE_CROSS_GROUP, false));
+    // }
 
     private void loadCurrentSourceList() {
         ArrayList<String> currentSourceNames = currentLiveChannelItem.getChannelSourceNames();
-        ArrayList<LiveSettingItem> liveSettingItemList = new ArrayList<>();
-        for (int j = 0; j < currentSourceNames.size(); j++) {
-            LiveSettingItem liveSettingItem = new LiveSettingItem();
-            liveSettingItem.setItemIndex(j);
-            liveSettingItem.setItemName(currentSourceNames.get(j));
-            liveSettingItemList.add(liveSettingItem);
-        }
-        liveSettingGroupList.get(0).setLiveSettingItems(liveSettingItemList);
+        // ArrayList<LiveSettingItem> liveSettingItemList = new ArrayList<>();
+        // for (int j = 0; j < currentSourceNames.size(); j++) {
+        //     LiveSettingItem liveSettingItem = new LiveSettingItem();
+        //     liveSettingItem.setItemIndex(j);
+        //     liveSettingItem.setItemName(currentSourceNames.get(j));
+        //     liveSettingItemList.add(liveSettingItem);
+        // }
+        // liveSettingGroupList.get(0).setLiveSettingItems(liveSettingItemList);
     }
 
     void showTime() {
