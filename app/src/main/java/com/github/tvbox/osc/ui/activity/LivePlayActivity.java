@@ -135,7 +135,9 @@ public class LivePlayActivity extends BaseActivity {
     TextView tv_channelnum;
     TextView tip_chname;
     TextView tip_epg1;
-    TextView  tip_epg2;
+    TextView tip_epg2;
+    TextView tv_current_program_name;
+    TextView tv_next_program_name;
     TextView tv_srcinfo;
     TextView tv_curepg_left;
     TextView tv_nextepg_left;
@@ -221,9 +223,12 @@ public class LivePlayActivity extends BaseActivity {
         tv_channelnum = (TextView) findViewById(R.id.tv_channel_bottom_number); //底部数字
         tip_epg1 = (TextView) findViewById(R.id.tv_current_program_time);//底部EPG当前节目信息
         tip_epg2 = (TextView) findViewById(R.id.tv_next_program_time);//底部EPG当下个节目信息
+        tv_current_program_name=(TextView) findViewById(R.id.tv_current_program_name);
+        tv_next_program_name=(TextView) findViewById(R.id.tv_next_program_name);
+
         tv_srcinfo = (TextView) findViewById(R.id.tv_source);//线路状态
         tv_curepg_left = (TextView) findViewById(R.id.tv_current_program);//当前节目
-        tv_nextepg_left= (TextView) findViewById(R.id.tv_current_program);//下一节目
+        tv_nextepg_left= (TextView) findViewById(R.id.tv_next_program);//下一节目
         ll_epg = (RelativeLayout) findViewById(R.id.ll_epg);
         tv_right_top_channel_numx = (TextView)findViewById(R.id.tv_right_top_channel_numx);
         tv_right_top_source_index = (TextView)findViewById(R.id.tv_right_top_source_index);
@@ -461,12 +466,12 @@ public class LivePlayActivity extends BaseActivity {
             return;
         }
 
-        ((TextView) findViewById(R.id.tv_channel_bar_name)).setText(channel_Name.getChannelName());
-        ((TextView) findViewById(R.id.tv_channel_bottom_number)).setText("" + channel_Name.getChannelNum());
+        tip_chname.setText(channel_Name.getChannelName());
+        tv_channelnum.setText("" + channel_Name.getChannelNum());
         tip_epg1.setText("暂无信息");
         tip_epg2.setText("");
-        ((TextView) findViewById(R.id.tv_current_program_name)).setText("");
-        ((TextView) findViewById(R.id.tv_next_program_name)).setText("");
+        tv_current_program_name.setText("");
+        tv_next_program_name.setText("");
 
         String savedEpgKey = channel_Name.getChannelName() + "_" 
             + liveEpgDateAdapter.getItem(liveEpgDateAdapter.getSelectedIndex()).getDatePresented();
@@ -481,10 +486,10 @@ public class LivePlayActivity extends BaseActivity {
                 while (size >= 0) {
                     if (new Date().compareTo(((Epginfo) arrayList.get(size)).startdateTime) >= 0) {
                         tip_epg1.setText(((Epginfo) arrayList.get(size)).start + "--" + ((Epginfo) arrayList.get(size)).end);
-                        ((TextView) findViewById(R.id.tv_current_program_name)).setText(((Epginfo) arrayList.get(size)).title);
+                        tv_current_program_name.setText(((Epginfo) arrayList.get(size)).title);
                         if (size != arrayList.size() - 1) {
                             tip_epg2.setText(((Epginfo) arrayList.get(size + 1)).start + "--" + ((Epginfo) arrayList.get(size)).end);
-                            ((TextView) findViewById(R.id.tv_next_program_name)).setText(((Epginfo) arrayList.get(size + 1)).title);
+                            tv_next_program_name.setText(((Epginfo) arrayList.get(size + 1)).title);
                         }
                         break;
                     } else {
@@ -525,12 +530,12 @@ public class LivePlayActivity extends BaseActivity {
         // 频道序号 channel_Name.getSourceIndex()
         // 源数量:channel_Name.getSourceNum()
         if (channel_Name == null || channel_Name.getSourceNum() <= 0) {
-            str_source="1/1";
+            str_source="(1/1)";
         } else {
-            str_source=""+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum();
+            str_source="("+(channel_Name.getSourceIndex() + 1) + "/" + channel_Name.getSourceNum()+")";
         }
-        ((TextView) findViewById(R.id.tv_source)).setText("[线路" + str_source + "]");
-        tv_right_top_source_index.setText("("+str_source+")");
+        tv_srcinfo.setText("[线路" + str_source + "]");
+        tv_right_top_source_index.setText(str_source);
 
         tv_right_top_channel_name.setText(channel_Name.getChannelName());
         tv_right_top_channel_numx.setText("" + channel_Name.getChannelNum());
