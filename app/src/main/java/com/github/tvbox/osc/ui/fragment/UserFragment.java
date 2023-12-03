@@ -323,17 +323,18 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         FastClickCheckUtil.check(v);
         if (v.getId() == R.id.tvLive) {
             jumpActivity(LivePlayActivity.class);
-        } else if (v.getId() == R.id.tvSearch) {
-            jumpActivity(SearchActivity.class);
-        } else if (v.getId() == R.id.tvSetting) {
-            jumpActivity(SettingActivity.class);
-        } else if (v.getId() == R.id.tvHistory) {
-            jumpActivity(HistoryActivity.class);
-        } else if (v.getId() == R.id.tvPush) {
-            jumpActivity(PushActivity.class);
-        } else if (v.getId() == R.id.tvFavorite) {
-            jumpActivity(CollectActivity.class);
         }
+//        else if (v.getId() == R.id.tvSearch) {
+//            jumpActivity(SearchActivity.class);
+//        } else if (v.getId() == R.id.tvSetting) {
+//            jumpActivity(SettingActivity.class);
+//        } else if (v.getId() == R.id.tvHistory) {
+//            jumpActivity(HistoryActivity.class);
+//        } else if (v.getId() == R.id.tvPush) {
+//            jumpActivity(PushActivity.class);
+//        } else if (v.getId() == R.id.tvFavorite) {
+//            jumpActivity(CollectActivity.class);
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

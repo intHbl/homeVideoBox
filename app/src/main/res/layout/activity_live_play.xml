@@ -167,11 +167,12 @@
 	<!-- 底部的信息条 ,有 epg 信息 才显示-->
 	<RelativeLayout
 		android:id="@+id/ll_epg"
-		android:layout_width="600dp"
+		android:layout_width="400dp"
 		android:layout_height="@dimen/vs_140"
 		android:layout_gravity="bottom|center"
 		android:gravity="center_vertical"
-		android:paddingBottom="5dp">
+		android:paddingBottom="5dp"
+		android:visibility="gone">
 
 		<View
 			android:id="@+id/view_bg"
@@ -250,9 +251,8 @@
 					android:layout_width="@dimen/vs_180"
 					android:layout_height="@dimen/vs_60"
 					android:layout_gravity="center"
-					android:scaleType="centerInside"
-					/>
-<!--					android:src="@drawable/app_banner" />-->
+					android:scaleType="centerInside" />
+				<!--					android:src="@drawable/app_banner" />-->
 
 			</FrameLayout>
 
@@ -604,7 +604,7 @@
 				android:shadowDx="-1"
 				android:shadowDy="-1"
 				android:shadowRadius="1"
-				android:textSize="@dimen/vs_25" />
+				android:textSize="@dimen/vs_30" />
 
 			<TextView
 				android:id="@+id/tv_right_top_source_index"
@@ -612,13 +612,15 @@
 				android:layout_height="wrap_content"
 				android:layout_alignParentRight="true"
 				android:layout_gravity="right"
+				android:layout_marginTop="1mm"
 				android:gravity="right"
 				android:singleLine="true"
 				android:text="(1/10)"
-				android:textColor="#1D2020"
-				android:shadowColor="#AFFFFFFF"
-				android:shadowDx="-1"
-				android:shadowDy="-1"
+				android:textColor="#AFFFFFFF"
+				android:shadowColor="#2C6E6E"
+				android:textStyle="bold"
+				android:shadowDx="1"
+				android:shadowDy="1"
 				android:shadowRadius="1"
 				android:textSize="@dimen/vs_15" />
 

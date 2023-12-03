@@ -74,6 +74,8 @@ public class ApiConfig {
 
     private String requestAccept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9";
 
+    private int tryCount=0;
+
     private ApiConfig() {
         sourceBeanList = new LinkedHashMap<>();
         liveChannelGroupList = new ArrayList<>();
@@ -132,8 +134,34 @@ public class ApiConfig {
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
         // api here
         // String apiUrl = Hawk.get(HawkConfig.API_URL, "http://server.lan:9966/tvbox/home.json");
-        String apiUrl = "http://server.lan:9966/tvbox/home.json";
+        String apiUrl0 = "http://server.lan:9966/tvbox/home.json";
 
+        List<String> apiUrls = new ArrayList<String>();
+
+        apiUrls.add("http://tv.server.lan:9966/tvbox/home.json");
+        apiUrls.add("http://homevideoserver.lan:9966/tvbox/home.json");
+        apiUrls.add("http://home-video-server.lan:9966/tvbox/home.json");
+        apiUrls.add("http://homelab.lan:9966/tvbox/home.json");
+        apiUrls.add(apiUrl0);
+        apiUrls.add("http://tv.server.lan/tvbox/home.json");
+        apiUrls.add("http://homevideoserver.lan/tvbox/home.json");
+        apiUrls.add("http://home-video-server.lan/tvbox/home.json");
+        apiUrls.add("http://homelab.lan/tvbox/home.json");
+
+        apiUrls.add(apiUrl0);
+
+        if(useCache && tryCount>= apiUrls.size()){
+            // 优先下载.
+            useCache=true;
+        }else{
+            useCache=false;
+        }
+        loadConfig_(useCache,callback,activity,apiUrls.get(tryCount%apiUrls.size()));
+        tryCount++;
+
+    }
+
+    public void loadConfig_(boolean useCache, LoadConfigCallback callback, Activity activity,String apiUrl) {
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;
@@ -317,6 +345,10 @@ public class ApiConfig {
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
+        if(DefaultConfig.safeJsonInt(infoJson,"_live_mode",0)==1){
+            Hawk.put(HawkConfig.LIVE_MODE,true);
+        }
+
         // 远端站点源
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {

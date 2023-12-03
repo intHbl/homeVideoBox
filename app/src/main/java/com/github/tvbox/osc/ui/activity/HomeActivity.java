@@ -88,6 +88,8 @@ public class HomeActivity extends BaseActivity {
     public View sortFocusView = null;
     private Handler mHandler = new Handler();
     private long mExitTime = 0;
+
+    private int retryCount=0;
     private Runnable mRunnable = new Runnable() {
         @SuppressLint({"DefaultLocale", "SetTextI18n"})
         @Override
@@ -122,6 +124,14 @@ public class HomeActivity extends BaseActivity {
         initData();
     }
 
+    private void postInitData(){
+        mHandler.postDelayed(()-> {
+            if (Hawk.get(HawkConfig.LIVE_MODE, false)) {
+//                jumpActivity(LivePlayActivity.class);
+                jumpActivity(LivePlayActivity.class);
+            }
+        },2000);
+    }
     private void initView() {
         this.topLayout = findViewById(R.id.topLayout);
         this.tvDate = findViewById(R.id.tvDate);
@@ -272,6 +282,8 @@ public class HomeActivity extends BaseActivity {
             } else {
                 LOG.e("无");
             }
+
+            postInitData();
             return;
         }
         showLoading();
@@ -354,47 +366,63 @@ public class HomeActivity extends BaseActivity {
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (dialog == null)
-                            dialog = new TipDialog(HomeActivity.this, msg, "重试", "取消", new TipDialog.OnListener() {
-                                @Override
-                                public void left() {
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initData();
-                                            dialog.hide();
-                                        }
-                                    });
-                                }
+                        retryCount++;
+                        if(retryCount%11==0){
+                            Toast.makeText(mContext, "正在重试..."+(retryCount/11), Toast.LENGTH_SHORT).show();
+                            mHandler.postDelayed(()->{
+                                // wait 2sec
+                                initData();
+                            },2000);
+                        }else {
+                            initData();
+                        }
 
-                                @Override
-                                public void right() {
-                                    dataInitOk = true;
-                                    jarInitOk = true;
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initData();
-                                            dialog.hide();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void cancel() {
-                                    dataInitOk = true;
-                                    jarInitOk = true;
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            initData();
-                                            dialog.hide();
-                                        }
-                                    });
-                                }
-                            });
-                        if (!dialog.isShowing())
-                            dialog.show();
+//                        if (retryCount<11){
+//                            initData();
+//                            return;
+//                        }
+//                        //  不使用 dialog, 一直重试.!!!
+//                        if (dialog == null)
+//                            dialog = new TipDialog(HomeActivity.this, msg, "重试", "取消", new TipDialog.OnListener() {
+//                                @Override
+//                                public void left() {
+//                                    mHandler.post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            initData();
+//                                            dialog.hide();
+//                                        }
+//                                    });
+//                                }
+//
+//                                @Override
+//                                public void right() {
+//                                    dataInitOk = true;
+//                                    jarInitOk = true;
+//                                    mHandler.post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            initData();
+//                                            dialog.hide();
+//                                        }
+//                                    });
+//                                }
+//
+//                                @Override
+//                                public void cancel() {
+//                                    dataInitOk = true;
+//                                    jarInitOk = true;
+//                                    mHandler.post(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            initData();
+//                                            dialog.hide();
+//                                        }
+//                                    });
+//                                }
+//                            });
+//                        if (!dialog.isShowing())
+//                            dialog.show();
                     }
                 });
             }
@@ -523,11 +551,11 @@ public class HomeActivity extends BaseActivity {
                 if (sortFocused != currentSelected) {
                     currentSelected = sortFocused;
                     mViewPager.setCurrentItem(sortFocused, false);
-                    if (sortFocused == 0) {
-                        changeTop(false);
-                    } else {
-                        changeTop(true);
-                    }
+//                    if (sortFocused == 0) {
+//                        changeTop(false);
+//                    } else {
+//                        changeTop(true);
+//                    }
                 }
             }
         }
