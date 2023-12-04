@@ -129,7 +129,7 @@
 
 				<com.owen.tvrecyclerview.widget.TvRecyclerView
 					android:id="@+id/mGroupGridView"
-					android:layout_width="@dimen/vs_180"
+					android:layout_width="@dimen/vs_150"
 					android:layout_height="wrap_content"
 					android:divider="@null"
 					android:fadeScrollbars="false"
@@ -149,7 +149,7 @@
 			<!-- 频道列表  -->
 			<com.owen.tvrecyclerview.widget.TvRecyclerView
 				android:id="@+id/mChannelGridView"
-				android:layout_width="162dp"
+				android:layout_width="180dp"
 				android:layout_height="match_parent"
 				android:divider="@null"
 				android:fadeScrollbars="false"
@@ -167,10 +167,11 @@
 	<!-- 底部的信息条 ,有 epg 信息 才显示-->
 	<RelativeLayout
 		android:id="@+id/ll_epg"
-		android:layout_width="580dp"
+		android:layout_width="620dp"
 		android:layout_height="@dimen/vs_140"
-		android:layout_gravity="bottom|center"
+		android:layout_gravity="bottom|right"
 		android:gravity="center_vertical"
+		android:layout_marginRight="@dimen/vs_10"
 		android:paddingBottom="5dp"
 		android:visibility="gone"
 		tools:visibility="visible">
