@@ -125,12 +125,21 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void postInitData(){
+        int live_mode=ApiConfig.get().live_mode;
+        int delay=100;
+        if(live_mode<=0){
+            return;
+        }
+        if(live_mode==1){
+            delay=2000;
+        }else if(live_mode==2){
+            delay=500;
+        }else if(live_mode>=10){
+            delay=0;
+        }
         mHandler.postDelayed(()-> {
-            if (Hawk.get(HawkConfig.LIVE_MODE, false)) {
-//                jumpActivity(LivePlayActivity.class);
-                jumpActivity(LivePlayActivity.class);
-            }
-        },2000);
+            jumpActivity(LivePlayActivity.class);
+        },delay);
     }
     private void initView() {
         this.topLayout = findViewById(R.id.topLayout);

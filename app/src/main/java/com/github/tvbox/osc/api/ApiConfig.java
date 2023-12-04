@@ -64,6 +64,7 @@ public class ApiConfig {
     private List<IJKCode> ijkCodes;
     private String spider = null;
     public String wallpaper = "";
+    public int live_mode = 0;
 
     private SourceBean emptyHome = new SourceBean();
 
@@ -345,9 +346,8 @@ public class ApiConfig {
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
-        if(DefaultConfig.safeJsonInt(infoJson,"_live_mode",0)==1){
-            Hawk.put(HawkConfig.LIVE_MODE,true);
-        }
+
+        live_mode=DefaultConfig.safeJsonInt(infoJson,"_live_mode",0);
 
         // 远端站点源
         SourceBean firstSite = null;

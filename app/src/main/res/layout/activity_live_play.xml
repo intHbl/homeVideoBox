@@ -103,7 +103,7 @@
 	<LinearLayout
 		android:id="@+id/tvLeftChannnelListLayout"
 		android:layout_width="match_parent"
-		android:layout_height="425dp"
+		android:layout_height="match_parent"
 		android:layout_gravity="center_horizontal"
 		android:layout_margin="0dp"
 		android:baselineAligned="false"
@@ -167,12 +167,13 @@
 	<!-- 底部的信息条 ,有 epg 信息 才显示-->
 	<RelativeLayout
 		android:id="@+id/ll_epg"
-		android:layout_width="400dp"
+		android:layout_width="580dp"
 		android:layout_height="@dimen/vs_140"
 		android:layout_gravity="bottom|center"
 		android:gravity="center_vertical"
 		android:paddingBottom="5dp"
-		android:visibility="gone">
+		android:visibility="gone"
+		tools:visibility="visible">
 
 		<View
 			android:id="@+id/view_bg"

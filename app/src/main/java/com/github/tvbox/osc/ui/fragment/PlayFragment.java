@@ -901,7 +901,12 @@ public class PlayFragment extends BaseLazyFragment {
         VodInfo.VodSeries vs = mVodInfo.seriesMap.get(mVodInfo.playFlag).get(mVodInfo.playIndex);
         EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_REFRESH, mVodInfo.playIndex));
         setTip("正在获取播放信息", true, false);
-        String playTitleInfo = mVodInfo.name + " " + vs.name;
+//        String playTitleInfo = mVodInfo.name + " " + vs.name;
+        String playTitleInfo = mVodInfo.name;
+        if(mVodInfo.seriesMap.get(mVodInfo.playFlag).size()>1){
+            playTitleInfo += " - " + vs.name;
+        }
+
         mController.setTitle(playTitleInfo);
 
         stopParse();

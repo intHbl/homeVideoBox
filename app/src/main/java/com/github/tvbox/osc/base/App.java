@@ -76,9 +76,6 @@ public class App extends MultiDexApplication {
         Hawk.put(HawkConfig.IJK_CODEC, "硬解码");    		// 硬解码
         // }
 
-//        Hawk.put(HawkConfig.LIVE_MODE,true);
-//        Hawk.put(HawkConfig.LIVE_MODE,false);
-
 
         // 放在 live 的逻辑里做了.  直接写死 true
         // LIVE_CHANNEL = "last_live_channel_name";

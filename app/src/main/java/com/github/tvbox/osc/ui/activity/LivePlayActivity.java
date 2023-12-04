@@ -40,6 +40,7 @@ import com.github.tvbox.osc.bean.LiveEpgDate;
 import com.github.tvbox.osc.bean.LivePlayerManager;
 
 import com.github.tvbox.osc.player.controller.LiveController;
+import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.ui.adapter.LiveChannelGroupAdapter;
 import com.github.tvbox.osc.ui.adapter.LiveChannelItemAdapter;
 import com.github.tvbox.osc.ui.adapter.LiveEpgAdapter;
@@ -49,6 +50,7 @@ import com.github.tvbox.osc.ui.adapter.MyEpgAdapter;
 import com.github.tvbox.osc.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.osc.ui.tv.widget.ChannelListView;
 import com.github.tvbox.osc.ui.tv.widget.ViewObj;
+import com.github.tvbox.osc.util.AppManager;
 import com.github.tvbox.osc.util.EpgNameFuzzyMatch;
 import com.github.tvbox.osc.util.EpgUtil;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
@@ -69,6 +71,7 @@ import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -171,7 +174,9 @@ public class LivePlayActivity extends BaseActivity {
     private SeekBar sBar;
     private View iv_playpause;
     private View iv_play;
-    private  boolean show = false;
+    private boolean show = false;
+
+    private long mExitTime = 0;
 
     @Override
     protected int getLayoutResID() {
@@ -518,6 +523,23 @@ public class LivePlayActivity extends BaseActivity {
     }
 
 
+    private void doDoubleBackPress(){
+        exit();
+    }
+
+    private void exit() {
+        if (System.currentTimeMillis() - mExitTime < 2000) {
+            //这一段借鉴来自 q群老哥 IDCardWeb
+            EventBus.getDefault().unregister(this);
+            AppManager.getInstance().appExit(0);
+            ControlManager.get().stopServer();
+            finish();
+            super.onBackPressed();
+        } else {
+            mExitTime = System.currentTimeMillis();
+            Toast.makeText(mContext, "再按一次返回键🔙退出应用", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -530,9 +552,17 @@ public class LivePlayActivity extends BaseActivity {
             isBack= false;
             playPreSource();
         }else {
-            mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-            mHandler.removeCallbacks(mUpdateNetSpeedRun);
-            super.onBackPressed();
+            if(ApiConfig.get().live_mode>1){
+                // 0 : vod
+                // 1 : live 返回app主页
+                // 2 : live and 直接退(不返回
+                // 该模式下, 只有退出app, 不会返回到 点播界面.
+                doDoubleBackPress();
+            }else {
+                mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
+                mHandler.removeCallbacks(mUpdateNetSpeedRun);
+                super.onBackPressed();
+            }
         }
     }
 
