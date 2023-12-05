@@ -1,5 +1,7 @@
 package com.github.tvbox.osc.ui.activity;
 
+import android.content.ComponentName;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -153,6 +155,7 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
+    private int _count=0;
     private void initView() {
         EventBus.getDefault().register(this);
         llLayout = findViewById(R.id.llLayout);
@@ -212,23 +215,24 @@ public class SearchActivity extends BaseActivity {
                 }
             }
         });
+
         tvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                hasKeyBoard = true;
-                String wd = etSearch.getText().toString().trim();
-                if (!TextUtils.isEmpty(wd)) {
-                    if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", wd);
-                        jumpActivity(FastSearchActivity.class, bundle);
-                    }else {
-                        search(wd);
-                    }
-                } else {
-                    Toast.makeText(mContext, "输入内容不能为空", Toast.LENGTH_SHORT).show();
-                }
+//                hasKeyBoard = true;
+//                String wd = etSearch.getText().toString().trim();
+//                if (!TextUtils.isEmpty(wd)) {
+//                    if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("title", wd);
+//                        jumpActivity(FastSearchActivity.class, bundle);
+//                    }else {
+//                        search(wd);
+//                    }
+//                } else {
+//                    Toast.makeText(mContext, "输入内容不能为空", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
         tvClear.setOnClickListener(new View.OnClickListener() {

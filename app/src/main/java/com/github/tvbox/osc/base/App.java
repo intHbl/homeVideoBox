@@ -71,10 +71,14 @@ public class App extends MultiDexApplication {
         // if (!Hawk.contains(HawkConfig.PLAY_TYPE)) {
         Hawk.put(HawkConfig.PLAY_TYPE, 1);
         Hawk.put(HawkConfig.HOME_REC, 2);      				// Home Rec 0=豆瓣, 1=站点推荐, 2=历史
-        Hawk.put(HawkConfig.HOME_REC_STYLE, true);			// 0=首页单行(左右切换)，1=首页多行(上下切换)
+        Hawk.put(HawkConfig.HOME_REC_STYLE, false);			// false=首页单行(左右切换)，true=首页多行(上下切换)
         Hawk.put(HawkConfig.SEARCH_VIEW, 1);    			// 0=文字搜索列表 1=缩略图搜索列表
         Hawk.put(HawkConfig.IJK_CODEC, "硬解码");    		// 硬解码
         // }
+
+//        Hawk.put(HawkConfig.FAST_SEARCH_MODE, true); // 聚合模式, 不要聚合模式. 长按会搜索  . 再改一个 项目.  封面+名字--搜索--> 播放
+//        Hawk.put(HawkConfig.FAST_SEARCH_MODE, false); // true=聚合模式, 好像没啥区别...要在搜索框里的吧...
+        Hawk.put(HawkConfig.FAST_SEARCH_MODE, true); // true=聚合模式
 
 
         // 放在 live 的逻辑里做了.  直接写死 true

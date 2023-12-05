@@ -14,6 +14,7 @@ import com.github.tvbox.osc.bean.LiveChannelGroup;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.LiveChannelItem;
 import com.github.tvbox.osc.bean.ParseBean;
+import com.github.tvbox.osc.bean.PkgEntry;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.util.AES;
@@ -41,12 +42,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import tv.danmaku.ijk.media.player.pragma.DebugLog;
 
 /**
  * @author pj567
@@ -55,6 +59,8 @@ import java.util.regex.Pattern;
  */
 public class ApiConfig {
     private static ApiConfig instance;
+
+    private List<PkgEntry> pkgEntryList;
     private LinkedHashMap<String, SourceBean> sourceBeanList;
     private SourceBean mHomeSource;
     private ParseBean mDefaultParse;
@@ -78,6 +84,7 @@ public class ApiConfig {
     private int tryCount=0;
 
     private ApiConfig() {
+        pkgEntryList = new ArrayList<>();
         sourceBeanList = new LinkedHashMap<>();
         liveChannelGroupList = new ArrayList<>();
         parseBeanList = new ArrayList<>();
@@ -133,17 +140,21 @@ public class ApiConfig {
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
-        // api here
         // String apiUrl = Hawk.get(HawkConfig.API_URL, "http://server.lan:9966/tvbox/home.json");
+
+//        String apiUrl0="https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json";
         String apiUrl0 = "http://server.lan:9966/tvbox/home.json";
+        String apiUrl1 = "http://server.lan:9966/tvbox/home.json";
 
         List<String> apiUrls = new ArrayList<String>();
+        apiUrls.add(apiUrl0);
+        apiUrls.add(apiUrl1);
 
         apiUrls.add("http://tv.server.lan:9966/tvbox/home.json");
         apiUrls.add("http://homevideoserver.lan:9966/tvbox/home.json");
         apiUrls.add("http://home-video-server.lan:9966/tvbox/home.json");
         apiUrls.add("http://homelab.lan:9966/tvbox/home.json");
-        apiUrls.add(apiUrl0);
+
         apiUrls.add("http://tv.server.lan/tvbox/home.json");
         apiUrls.add("http://homevideoserver.lan/tvbox/home.json");
         apiUrls.add("http://home-video-server.lan/tvbox/home.json");
@@ -252,7 +263,7 @@ public class ApiConfig {
                             result = clanContentFix(clanToAddress(apiUrl), result);
                         }
                         //假相對路徑
-                        result = fixContentPath(apiUrl,result);
+                        result = fixContentRelPath(apiUrl,result);
                         return result;
                     }
                 });
@@ -349,6 +360,21 @@ public class ApiConfig {
 
         live_mode=DefaultConfig.safeJsonInt(infoJson,"_live_mode",0);
 
+        if(infoJson.has("_apk_pkgs")){
+            if(infoJson.get("_apk_pkgs").isJsonArray()){
+                for(JsonElement entry:infoJson.get("_apk_pkgs").getAsJsonArray()){
+                    JsonObject obj=(JsonObject) entry;
+                    PkgEntry pkgEntry=new PkgEntry();
+                    String name=obj.get("name").getAsString().trim();
+                    String pkg=obj.get("pkg").getAsString().trim();
+                    if(pkgEntry.setEntry(name,pkg)){
+                        pkgEntryList.add(pkgEntry);
+                    }
+                }
+            }
+        }
+
+
         // 远端站点源
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
@@ -358,15 +384,25 @@ public class ApiConfig {
             sb.setKey(siteKey);
             sb.setName(obj.get("name").getAsString().trim());
             sb.setType(obj.get("type").getAsInt());
-            sb.setApi(obj.get("api").getAsString().trim());
+            sb.setApi(_toUrl(apiUrl, obj.get("api").getAsString().trim()));
             sb.setSearchable(DefaultConfig.safeJsonInt(obj, "searchable", 1));
             sb.setQuickSearch(DefaultConfig.safeJsonInt(obj, "quickSearch", 1));
             sb.setFilterable(DefaultConfig.safeJsonInt(obj, "filterable", 1));
             sb.setPlayerUrl(DefaultConfig.safeJsonString(obj, "playUrl", ""));
-            if(obj.has("ext") && (obj.get("ext").isJsonObject() || obj.get("ext").isJsonArray())){
-                sb.setExt(obj.get("ext").toString());
+            if(obj.has("ext")){
+                if(obj.get("ext").isJsonObject()){
+                    JsonObject extObj= obj.get("ext").getAsJsonObject();
+                    extObj.addProperty("_globalApiUrl",apiUrl);
+                    sb.setExt(extObj.toString());
+                }
+                else if(obj.get("ext").isJsonArray()){
+                    //do nothing
+                    sb.setExt(obj.get("ext").toString());
+                }else{
+                    sb.setExt(_toUrl(apiUrl, DefaultConfig.safeJsonString(obj, "ext", "")));
+                }
             }else {
-                sb.setExt(DefaultConfig.safeJsonString(obj, "ext", ""));
+                sb.setExt("");
             }
             sb.setJar(DefaultConfig.safeJsonString(obj, "jar", ""));
             sb.setPlayerType(DefaultConfig.safeJsonInt(obj, "playerType", -1));
@@ -463,6 +499,8 @@ public class ApiConfig {
                             String epg =fengMiLives.get("epg").getAsString();
                             Hawk.put(HawkConfig.EPG_URL,epg);
                         }
+
+                        url=_toUrl(apiUrl,url);
 
                         if(url.startsWith("http")){
                             url = Base64.encodeToString(url.getBytes("UTF-8"), Base64.DEFAULT | Base64.URL_SAFE | Base64.NO_WRAP);
@@ -706,6 +744,9 @@ public class ApiConfig {
         return mDefaultParse;
     }
 
+    public List<PkgEntry> getPkgEntryList() {
+        return pkgEntryList;
+    }
     public List<SourceBean> getSourceBeanList() {
         return new ArrayList<>(sourceBeanList.values());
     }
@@ -758,7 +799,7 @@ public class ApiConfig {
         return content.replace("clan://", fix);
     }
 
-    String fixContentPath(String url, String content) {
+    String fixContentRelPath(String url, String content) {
         if (content.contains("\"./")) {
             if(!url.startsWith("http") && !url.startsWith("clan://")){
                 url = "http://" + url;
@@ -767,5 +808,37 @@ public class ApiConfig {
             content = content.replace("./", url.substring(0,url.lastIndexOf("/") + 1));
         }
         return content;
+    }
+
+    private final List<String> url_pres=Arrays.asList("clan://","http://","https://");
+    private String _toUrl(String url, String path) {
+        url=url.trim();
+        path=path.trim();
+
+        if(!url.startsWith("http") && !url.startsWith("clan://")){
+            url = "http://" + url;
+        }
+
+        if (path.startsWith("./")) {
+            if(url.startsWith("clan://")){
+                url=clanToAddress(url);
+            }
+            return path.replace("^\\./+", url.substring(0,url.lastIndexOf("/") + 1));
+        }
+
+        if (path.startsWith("/")) {
+            for (String pre : url_pres) {
+                if (url.startsWith(pre)) {
+                    url = url.substring(pre.length());
+                    url = url.substring(0, url.indexOf("/")+1);
+                    url = path.replace("^/+", pre + url);
+                    if (pre == "clan://") {
+                        url = clanToAddress(url);
+                    }
+                    return url;
+                }
+            }
+        }
+        return path;
     }
 }

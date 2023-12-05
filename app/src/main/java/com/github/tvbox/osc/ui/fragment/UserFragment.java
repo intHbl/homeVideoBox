@@ -1,17 +1,24 @@
 package com.github.tvbox.osc.ui.fragment;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
+import com.github.tvbox.osc.base.App;
 import com.github.tvbox.osc.base.BaseLazyFragment;
 import com.github.tvbox.osc.bean.Movie;
+import com.github.tvbox.osc.bean.PkgEntry;
 import com.github.tvbox.osc.bean.VodInfo;
 import com.github.tvbox.osc.cache.RoomDataManger;
 import com.github.tvbox.osc.event.ServerEvent;
@@ -54,6 +61,10 @@ import java.util.List;
  */
 public class UserFragment extends BaseLazyFragment implements View.OnClickListener {
     private LinearLayout tvLive;
+
+    private List<LinearLayout> pkgLayoutList;
+    private List<ImageView> pkgImageViewList;
+    private List<TextView> pkgTextViewList;
     private LinearLayout tvSearch;
     private LinearLayout tvSetting;
     private LinearLayout tvHistory;
@@ -124,10 +135,10 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         tvHistory = findViewById(R.id.tvHistory);
         tvPush = findViewById(R.id.tvPush);
         tvLive.setOnClickListener(this);
-        //tvSearch.setOnClickListener(this);
-        //tvSetting.setOnClickListener(this);
-        //tvHistory.setOnClickListener(this);
-        //tvPush.setOnClickListener(this);
+        tvSearch.setOnClickListener(this);
+        tvSetting.setOnClickListener(this);
+        tvHistory.setOnClickListener(this);
+        tvPush.setOnClickListener(this);
         tvCollect.setOnClickListener(this);
         tvLive.setOnFocusChangeListener(focusChangeListener);
         tvSearch.setOnFocusChangeListener(focusChangeListener);
@@ -135,6 +146,65 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         tvHistory.setOnFocusChangeListener(focusChangeListener);
         tvPush.setOnFocusChangeListener(focusChangeListener);
         tvCollect.setOnFocusChangeListener(focusChangeListener);
+
+        pkgLayoutList=new ArrayList<>();
+        pkgLayoutList.add((LinearLayout) findViewById(R.id.pkg1));
+        pkgLayoutList.add(findViewById(R.id.pkg2));
+        pkgLayoutList.add(findViewById(R.id.pkg3));
+        pkgLayoutList.add(findViewById(R.id.pkg4));
+        pkgLayoutList.add(findViewById(R.id.pkg5));
+        pkgLayoutList.add(findViewById(R.id.pkg6));
+        pkgLayoutList.add(findViewById(R.id.pkg7));
+        pkgLayoutList.add(findViewById(R.id.pkg8));
+        pkgLayoutList.add(findViewById(R.id.pkg9));
+        pkgLayoutList.add(findViewById(R.id.pkg10));
+
+        pkgImageViewList=new ArrayList<>();
+        pkgImageViewList.add(findViewById(R.id.pkg1_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg2_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg3_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg4_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg5_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg6_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg7_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg8_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg9_icon));
+        pkgImageViewList.add(findViewById(R.id.pkg10_icon));
+
+        pkgTextViewList=new ArrayList<>();
+        pkgTextViewList.add(findViewById(R.id.pkg1_text));
+        pkgTextViewList.add(findViewById(R.id.pkg2_text));
+        pkgTextViewList.add(findViewById(R.id.pkg3_text));
+        pkgTextViewList.add(findViewById(R.id.pkg4_text));
+        pkgTextViewList.add(findViewById(R.id.pkg5_text));
+        pkgTextViewList.add(findViewById(R.id.pkg6_text));
+        pkgTextViewList.add(findViewById(R.id.pkg7_text));
+        pkgTextViewList.add(findViewById(R.id.pkg8_text));
+        pkgTextViewList.add(findViewById(R.id.pkg9_text));
+        pkgTextViewList.add(findViewById(R.id.pkg10_text));
+
+//        List<PkgEntry> pkgEntryList= ApiConfig.get().getPkgEntryList();
+        for (int i=0;i<10 && i<ApiConfig.get().getPkgEntryList().size();++i){
+            PkgEntry entry=ApiConfig.get().getPkgEntryList().get(i);
+//            entry.setBtn(pkgLayoutList.get(i));
+            pkgImageViewList.get(i).setImageDrawable(entry.getIcon());
+            pkgTextViewList.get(i).setText(entry.getName());
+
+            pkgLayoutList.get(i).setVisibility(View.VISIBLE);
+            pkgImageViewList.get(i).setVisibility(View.VISIBLE);
+            pkgTextViewList.get(i).setVisibility(View.VISIBLE);
+
+            entry.setId(pkgLayoutList.get(i).getId());
+            pkgLayoutList.get(i).setOnClickListener(this);
+            pkgLayoutList.get(i).setOnFocusChangeListener(focusChangeListener);
+            // focus
+
+            // click
+//            Toast.makeText(mContext, "启动 pkg: "+entry.getName(), Toast.LENGTH_SHORT).show();
+//            startActivity(entry.getIntent());
+        }
+
+
         tvHotList1 = findViewById(R.id.tvHotList1);
         tvHotList2 = findViewById(R.id.tvHotList2);
         homeHotVodAdapter = new HomeHotVodAdapter();
@@ -314,6 +384,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         }
     };
 
+//    private int _count=0;
     @Override
     public void onClick(View v) {
     	
@@ -323,10 +394,59 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         FastClickCheckUtil.check(v);
         if (v.getId() == R.id.tvLive) {
             jumpActivity(LivePlayActivity.class);
+        }else{
+            for(PkgEntry entry: ApiConfig.get().getPkgEntryList()){
+                if(v.getId()==entry.getId()){
+//                    try {
+                        Toast.makeText(mContext, "启动 pkg: " + entry.getName(), Toast.LENGTH_SHORT).show();
+                        startActivity(entry.getIntent());
+                        // Toast.makeText(mContext, "启动 pkg: "+entry.getName(), Toast.LENGTH_SHORT).show();
+                        // startActivity(entry.getIntent());
+//                    }catch (Exception e){
+//
+//                    }
+                    return;
+                }
+            }
         }
 //        else if (v.getId() == R.id.tvSearch) {
-//            jumpActivity(SearchActivity.class);
-//        } else if (v.getId() == R.id.tvSetting) {
+////            _count++;
+//            List<PkgEntry> pkgEntryList= ApiConfig.get().getPkgEntryList();
+//            if (pkgEntryList.size()>=1){
+//                PkgEntry entry=pkgEntryList.get(0);
+//                Toast.makeText(mContext, "启动 pkg: "+entry.getName(), Toast.LENGTH_SHORT).show();
+//                startActivity(entry.getIntent());
+//            }
+
+////// OK: 但是需要知道 类的名字 pkg.类
+////            Toast.makeText(mContext, "clicked"+_count, Toast.LENGTH_SHORT).show();
+////            Intent intent = new Intent();
+////            intent.setComponent(new ComponentName("com.github.tvbox.osc.homeliveonly","com.github.tvbox.osc.ui.activity.HomeActivity"));
+////            startActivity(intent);
+//// com.fongmi.android.tv
+//            //
+//
+//            String pkg="com.github.tvbox.osc.homeliveonly";
+//            Toast.makeText(mContext, "启动 pkg: "+pkg, Toast.LENGTH_SHORT).show();
+//            Intent pkg_intent=App.getInstance().getPackageManager().getLaunchIntentForPackage(pkg);
+//            try {
+//                // 这个设置图标 放在初始化上, 不要放在 click 事件上.
+//                Drawable icon = App.getInstance().getPackageManager().getApplicationIcon(pkg);
+//                ((ImageView) findViewById(R.id.app1)).setImageDrawable(icon);// setBackground(icon);
+//
+////                App.getInstance().getPackageManager().
+////                getLaunchIntentForPackage
+////                getLaunchIntentForPackage
+//            }catch (PackageManager.NameNotFoundException e){
+//                e.printStackTrace();
+//            }
+//            startActivity(pkg_intent);
+//
+//////            jumpActivity(SearchActivity.class);
+
+
+//        }
+//        else if (v.getId() == R.id.tvSetting) {
 //            jumpActivity(SettingActivity.class);
 //        } else if (v.getId() == R.id.tvHistory) {
 //            jumpActivity(HistoryActivity.class);
