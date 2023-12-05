@@ -1,6 +1,6 @@
 <resources>
     <!--  app名称   -->
-    <string name="app_name">电影电视</string>
-	<string name="mn_Version">2023.1202.0002</string>
-	<string name="dia_about">电影电视</string>
+    <string name="app_name">电影电视Launcher</string>
+	<string name="mn_Version">2023.1204.0002</string>
+	<string name="dia_about">电影电视Launcher</string>
 </resources>

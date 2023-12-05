@@ -71,16 +71,10 @@ jobs:
             mv "$file" apk/TVBox_q215613905-ori_${{ env.tag }}_Debug.apk
           done
         
-      - name: Release and Upload Assets
-        uses: softprops/action-gh-release@v1
+
+      - name: Upload App To Artifact
+        uses: actions/upload-artifact@v3
         if: ${{ env.commit }}
         with:
-          name: ${{ env.tag }}
-          tag_name: ${{ env.tag }}
-          body: ${{ env.commit }}
-          files: |
-            TVBoxOSC/apk/*
-            TVBoxOSC/${{ env.commitS }}-source.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+          name: homeVideoBoxMain-Release-${{ env.commit }}
+          path: TVBoxOSC/apk/*

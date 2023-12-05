@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -505,17 +506,25 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    private int mExitTimeCount=0;
     private void exit() {
-        if (System.currentTimeMillis() - mExitTime < 2000) {
-            //这一段借鉴来自 q群老哥 IDCardWeb
-            EventBus.getDefault().unregister(this);
-            AppManager.getInstance().appExit(0);
-            ControlManager.get().stopServer();
-            finish();
-            super.onBackPressed();
+        if (System.currentTimeMillis() - mExitTime < 3000) {
+            if(mExitTimeCount<5) {
+
+            }else if(mExitTimeCount==5) {
+                Toast.makeText(mContext, "再按一次返回键🔙退出应用", Toast.LENGTH_SHORT).show();
+            }else{
+                //这一段借鉴来自 q群老哥 IDCardWeb
+                EventBus.getDefault().unregister(this);
+                AppManager.getInstance().appExit(0);
+                ControlManager.get().stopServer();
+                finish();
+                super.onBackPressed();
+            }
+            mExitTimeCount++;
         } else {
+            mExitTimeCount=0;
             mExitTime = System.currentTimeMillis();
-            Toast.makeText(mContext, "再按一次返回键🔙退出应用", Toast.LENGTH_SHORT).show();            
         }
     }
 
@@ -658,9 +667,33 @@ public class HomeActivity extends BaseActivity {
         ControlManager.get().stopServer();
     }
 
+    private int mMenuTimeCount=0;
+    private long mMenuTime=0;
+    private void showMenu() {
+        if (System.currentTimeMillis() - mMenuTime < 3000) {
+            if(mMenuTimeCount<5) {
+
+            }else if(mMenuTimeCount==5) {
+//                Toast.makeText(mContext, "menu", Toast.LENGTH_SHORT).show();
+                mMenuTime = System.currentTimeMillis();
+            }else if(mMenuTimeCount>10){
+                Toast.makeText(mContext, "open settings menu", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+//                openOptionsMenu();
+//                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+            }
+            mMenuTimeCount++;
+        } else {
+            mMenuTimeCount=0;
+            mMenuTime = System.currentTimeMillis();
+        }
+    }
+
     void showSiteSwitch() {
         List<SourceBean> sites = ApiConfig.get().getSourceBeanList();
         if(sites.size()==1){
+            // 当只有一个仓库时. 作为 主界面使用.  多次连按menu会弹出安卓 设置界面.
+            showMenu();
             return;
         }
         if (sites.size() > 0) {

@@ -360,6 +360,7 @@ public class ApiConfig {
 
         live_mode=DefaultConfig.safeJsonInt(infoJson,"_live_mode",0);
 
+        pkgEntryList.clear();//防止 重复 添加.
         if(infoJson.has("_apk_pkgs")){
             if(infoJson.get("_apk_pkgs").isJsonArray()){
                 for(JsonElement entry:infoJson.get("_apk_pkgs").getAsJsonArray()){

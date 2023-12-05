@@ -65,6 +65,8 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     private List<LinearLayout> pkgLayoutList;
     private List<ImageView> pkgImageViewList;
     private List<TextView> pkgTextViewList;
+    private boolean pkgAdded=false;
+
     private LinearLayout tvSearch;
     private LinearLayout tvSetting;
     private LinearLayout tvHistory;
