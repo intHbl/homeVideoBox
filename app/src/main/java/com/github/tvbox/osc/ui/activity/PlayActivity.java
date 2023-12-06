@@ -336,66 +336,101 @@ public class PlayActivity extends BaseActivity {
     }
 
     void selectMyAudioTrack() {
+        // 改成了 切换到下一个 audio track
         AbstractPlayer mediaPlayer = mVideoView.getMediaPlayer();
         if (!(mediaPlayer instanceof IjkMediaPlayer)) {
             return;
         }
-        TrackInfo trackInfo = null;
-        if (mediaPlayer instanceof IjkMediaPlayer) {
-            trackInfo = ((IjkMediaPlayer)mediaPlayer).getTrackInfo();
-        }
+
+        TrackInfo trackInfo = ((IjkMediaPlayer)mediaPlayer).getTrackInfo();
+
         if (trackInfo == null) {
             Toast.makeText(mContext, "没有音轨", Toast.LENGTH_SHORT).show();
             return;
         }
+
         List<TrackInfoBean> bean = trackInfo.getAudio();
-        if (bean.size() < 1) return;
-        SelectDialog<TrackInfoBean> dialog = new SelectDialog<>(PlayActivity.this);
-        dialog.setTip("切换音轨");
-        dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<TrackInfoBean>() {
-            @Override
-            public void click(TrackInfoBean value, int pos) {
-                try {
-                    for (TrackInfoBean audio : bean) {
-                        audio.selected = audio.index == value.index;
-                    }
-                    mediaPlayer.pause();
-                    long progress = mediaPlayer.getCurrentPosition();//保存当前进度，ijk 切换轨道 会有快进几秒
-                    if (mediaPlayer instanceof IjkMediaPlayer) {
-                        ((IjkMediaPlayer)mediaPlayer).setTrack(value.index);
-                    }
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mediaPlayer.seekTo(progress);
-                            mediaPlayer.start();
-                        }
-                    }, 800);
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    LOG.e("切换音轨出错");
+
+        if (bean.size() < 2) return;
+        int index=0;
+        boolean flag=false;
+        try {
+            for (TrackInfoBean audio : bean) {
+                if (audio.selected) {
+                    audio.selected=false;
+                    flag=true;
+                    break;
                 }
+                index++;
             }
+            if(!flag) {
+                bean.get(0).selected=false;
+                index=0;
+            }
+            index = (index + 1) % bean.size();
+            TrackInfoBean audio = bean.get(index);
+            audio.selected = true;
 
-            @Override
-            public String getDisplay(TrackInfoBean val) {
-                String name = val.name.replace("AUDIO,", "");
-                name = name.replace("N/A,", "");
-                name = name.replace(" ", "");
-                return val.index + " : " + val.language + " : " + name;
-            }
-        }, new DiffUtil.ItemCallback<TrackInfoBean>() {
-            @Override
-            public boolean areItemsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
-                return oldItem.index == newItem.index;
-            }
+            mediaPlayer.pause();
+            long progress = mediaPlayer.getCurrentPosition();//保存当前进度，ijk 切换轨道 会有快进几秒
+            ((IjkMediaPlayer)mediaPlayer).setTrack(audio.index);
+            Toast.makeText(mContext, "音轨: "+(index+1)+"/"+bean.size(), Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mediaPlayer.seekTo(progress);
+                    mediaPlayer.start();
+                }
+            }, 800);
 
-            @Override
-            public boolean areContentsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
-                return oldItem.index == newItem.index;
-            }
-        }, bean, trackInfo.getAudioSelected(false));
-        dialog.show();
+        }catch (Exception e){}
+
+//        SelectDialog<TrackInfoBean> dialog = new SelectDialog<>(PlayActivity.this);
+//        dialog.setTip("切换音轨");
+//        dialog.setAdapter(new SelectDialogAdapter.SelectDialogInterface<TrackInfoBean>() {
+//            @Override
+//            public void click(TrackInfoBean value, int pos) {
+//                try {
+//                    for (TrackInfoBean audio : bean) {
+//                        audio.selected = audio.index == value.index;
+//                    }
+//                    mediaPlayer.pause();
+//                    long progress = mediaPlayer.getCurrentPosition();//保存当前进度，ijk 切换轨道 会有快进几秒
+//                    if (mediaPlayer instanceof IjkMediaPlayer) {
+//                        ((IjkMediaPlayer)mediaPlayer).setTrack(value.index);
+//                    }
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mediaPlayer.seekTo(progress);
+//                            mediaPlayer.start();
+//                        }
+//                    }, 800);
+//                    dialog.dismiss();
+//                } catch (Exception e) {
+//                    LOG.e("切换音轨出错");
+//                }
+//            }
+//
+//            @Override
+//            public String getDisplay(TrackInfoBean val) {
+//                String name = val.name.replace("AUDIO,", "");
+//                name = name.replace("N/A,", "");
+//                name = name.replace(" ", "");
+//                return val.index + " : " + val.language + " : " + name;
+//            }
+//        }, new DiffUtil.ItemCallback<TrackInfoBean>() {
+//            @Override
+//            public boolean areItemsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
+//                return oldItem.index == newItem.index;
+//            }
+//
+//            @Override
+//            public boolean areContentsTheSame(@NonNull @NotNull TrackInfoBean oldItem, @NonNull @NotNull TrackInfoBean newItem) {
+//                return oldItem.index == newItem.index;
+//            }
+//        }, bean, trackInfo.getAudioSelected(false));
+//        dialog.show();
     }
 
     void selectMyInternalSubtitle() {

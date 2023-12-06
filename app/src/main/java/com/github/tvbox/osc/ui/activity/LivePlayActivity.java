@@ -385,7 +385,7 @@ public class LivePlayActivity extends BaseActivity {
         UrlHttpUtil.get(url, new CallBackUtil.CallBackString() {
             public void onFailure(int i, String str) {
                 showEpg(date, new ArrayList());
-                showBottomEpg(); // 失败了不执行.  会陷入循环...
+//                showBottomEpg(); // 失败了不执行.  会陷入循环...
             }
 
             public void onResponse(String paramString) {
@@ -734,10 +734,16 @@ public class LivePlayActivity extends BaseActivity {
         }else {
             currentLiveChannelItem.setinclude_back(false);
         }
-        // XXTODO 先不显示
-        // showBottomEpg();
 
-        getEpg(new Date());
+        if(!changeSource){
+            //换频道 才显示.
+
+            // XXTODO 先不显示 只show, 内部 不getEpg(..)
+            showBottomEpg();
+            //这里get
+            getEpg(new Date());
+        }
+
         
         backcontroller.setVisibility(View.GONE);
 

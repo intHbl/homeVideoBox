@@ -356,7 +356,7 @@ public class ApiConfig {
         // spider
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // wallpaper
-        wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
+        wallpaper = _toUrl(apiUrl,DefaultConfig.safeJsonString(infoJson, "wallpaper", ""));
 
         live_mode=DefaultConfig.safeJsonInt(infoJson,"_live_mode",0);
 

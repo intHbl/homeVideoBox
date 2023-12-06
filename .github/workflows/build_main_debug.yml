@@ -1,6 +1,8 @@
 name: Main Self debug
 ## get activity
 # dumpsys activity top | grep "ACTIVITY"
+# am monitor
+##
 ## first:
 # am start -D -n "package/package.SomeActivity"
 ## THEN:

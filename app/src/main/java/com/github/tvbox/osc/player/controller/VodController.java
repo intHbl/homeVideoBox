@@ -107,11 +107,11 @@ public class VodController extends BaseController {
         };
     }
 
-    SeekBar mSeekBar;
+//    SeekBar mSeekBar;
     SeekBar mSeekBar2;
-    TextView mCurrentTime;
+//    TextView mCurrentTime;
     TextView mCurrentTime2;
-    TextView mTotalTime;
+//    TextView mTotalTime;
     TextView mTotalTime2;
     boolean mIsDragging;
     LinearLayout mProgressRoot;
@@ -183,18 +183,18 @@ public class VodController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
-        mCurrentTime = findViewById(R.id.curr_time);
+//        mCurrentTime = findViewById(R.id.curr_time);
         //XXTODO
         mCurrentTime2 = findViewById(R.id.curr_time2);
         mTotalTime2 = findViewById(R.id.total_time2);
         mSeekBar2 = findViewById(R.id.seekBar2);
         mBottomRoot2 = findViewById(R.id.bottom_container2);
 
-        mTotalTime = findViewById(R.id.total_time);
+//        mTotalTime = findViewById(R.id.total_time);
         mPlayTitle = findViewById(R.id.tv_info_name);
         mPlayTitle1 = findViewById(R.id.tv_info_name1);
         mPlayLoadNetSpeedRightTop = findViewById(R.id.tv_play_load_net_speed_right_top);
-        mSeekBar = findViewById(R.id.seekBar);
+//        mSeekBar = findViewById(R.id.seekBar);
         mProgressRoot = findViewById(R.id.tv_progress_container);
         mProgressIcon = findViewById(R.id.tv_progress_icon);
         mProgressText = findViewById(R.id.tv_progress_text);
@@ -296,38 +296,38 @@ public class VodController extends BaseController {
 
         mParseRoot.setVisibility(VISIBLE);
 
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (!fromUser) {
-                    return;
-                }
-
-                long duration = mControlWrapper.getDuration();
-                long newPosition = (duration * progress) / seekBar.getMax();
-                if (mCurrentTime != null)
-                    mCurrentTime.setText(stringForTime((int) newPosition));
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                mIsDragging = true;
-                mControlWrapper.stopProgress();
-                mControlWrapper.stopFadeOut();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                myHandle.removeCallbacks(myRunnable);
-                myHandle.postDelayed(myRunnable, myHandleSeconds);
-                long duration = mControlWrapper.getDuration();
-                long newPosition = (duration * seekBar.getProgress()) / seekBar.getMax();
-                mControlWrapper.seekTo((int) newPosition);
-                mIsDragging = false;
-                mControlWrapper.startProgress();
-                mControlWrapper.startFadeOut();
-            }
-        });
+//        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//            @Override
+//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//                if (!fromUser) {
+//                    return;
+//                }
+//
+//                long duration = mControlWrapper.getDuration();
+//                long newPosition = (duration * progress) / seekBar.getMax();
+//                if (mCurrentTime != null)
+//                    mCurrentTime.setText(stringForTime((int) newPosition));
+//            }
+//
+//            @Override
+//            public void onStartTrackingTouch(SeekBar seekBar) {
+//                mIsDragging = true;
+//                mControlWrapper.stopProgress();
+//                mControlWrapper.stopFadeOut();
+//            }
+//
+//            @Override
+//            public void onStopTrackingTouch(SeekBar seekBar) {
+//                myHandle.removeCallbacks(myRunnable);
+//                myHandle.postDelayed(myRunnable, myHandleSeconds);
+//                long duration = mControlWrapper.getDuration();
+//                long newPosition = (duration * seekBar.getProgress()) / seekBar.getMax();
+//                mControlWrapper.seekTo((int) newPosition);
+//                mIsDragging = false;
+//                mControlWrapper.startProgress();
+//                mControlWrapper.startFadeOut();
+//            }
+//        });
 
         mSeekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -828,26 +828,26 @@ public class VodController extends BaseController {
                 listener.playNext(true);
             }
         }
-        mCurrentTime.setText(PlayerUtils.stringForTime(position));
+//        mCurrentTime.setText(PlayerUtils.stringForTime(position));
         mCurrentTime2.setText(PlayerUtils.stringForTime(position));
-        mTotalTime.setText(PlayerUtils.stringForTime(duration));
+//        mTotalTime.setText(PlayerUtils.stringForTime(duration));
         mTotalTime2.setText(PlayerUtils.stringForTime(duration));
         if (duration > 0) {
-            mSeekBar.setEnabled(true);
+//            mSeekBar.setEnabled(true);
             mSeekBar2.setEnabled(true);
-            int pos = (int) (position * 1.0 / duration * mSeekBar.getMax());
-            mSeekBar.setProgress(pos);
+            int pos = (int) (position * 1.0 / duration * mSeekBar2.getMax());
+//            mSeekBar.setProgress(pos);
             mSeekBar2.setProgress(pos);
         } else {
-            mSeekBar.setEnabled(false);
+//            mSeekBar.setEnabled(false);
             mSeekBar2.setEnabled(false);
         }
         int percent = mControlWrapper.getBufferedPercentage();
         if (percent >= 95) {
-            mSeekBar.setSecondaryProgress(mSeekBar.getMax());
-            mSeekBar2.setSecondaryProgress(mSeekBar.getMax());
+//            mSeekBar.setSecondaryProgress(mSeekBar.getMax());
+            mSeekBar2.setSecondaryProgress(mSeekBar2.getMax());
         } else {
-            mSeekBar.setSecondaryProgress(percent * 10);
+//            mSeekBar.setSecondaryProgress(percent * 10);
             mSeekBar2.setSecondaryProgress(percent * 10);
         }
     }
@@ -898,8 +898,9 @@ public class VodController extends BaseController {
         mHandler.removeMessages(1001);
         mHandler.sendEmptyMessageDelayed(1001, 1000);
 
-        int pos = (int) (seekTo * 1.0 / duration * mSeekBar.getMax());
-        mSeekBar.setProgress(pos);
+//        int pos = (int) (seekTo * 1.0 / duration * mSeekBar.getMax());
+        int pos = (int) (seekTo * 1.0 / duration * mSeekBar2.getMax());
+//        mSeekBar.setProgress(pos);
         mSeekBar2.setProgress(pos);
 
     }
@@ -965,6 +966,8 @@ public class VodController extends BaseController {
         mHandler.sendEmptyMessage(1003);
     }
 
+
+    private long mLastMenuClicked;
     @Override
     public boolean onKeyEvent(KeyEvent event) {
         myHandle.removeCallbacks(myRunnable);
@@ -992,12 +995,20 @@ public class VodController extends BaseController {
                     return true;
                 }
 //            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {  return true;// 闲置开启计时关闭透明底栏
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_UP || keyCode== KeyEvent.KEYCODE_MENU) {
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN || keyCode == KeyEvent.KEYCODE_DPAD_UP) {
                 if (!isBottomVisible()) {
                     showBottom();
                     myHandle.postDelayed(myRunnable, myHandleSeconds);
                     return true;
                 }
+            } else if(keyCode == KeyEvent.KEYCODE_MENU){
+                // TODO 长按 2秒 切换 音轨.
+//                if (System.currentTimeMillis()-mLastMenuClicked<300){
+//                    listener.selectAudioTrack();
+//                    return true;
+//                }else{
+                mLastMenuClicked=System.currentTimeMillis();
+//                }
             }
         } else if (action == KeyEvent.ACTION_UP) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT || keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
@@ -1005,6 +1016,12 @@ public class VodController extends BaseController {
                     tvSlideStop();
                     return true;
                 }
+            }
+            else if (keyCode == KeyEvent.KEYCODE_MENU
+                    && System.currentTimeMillis()-mLastMenuClicked>2000){
+                // TODO 长按 2秒 切换 音轨.
+                listener.selectAudioTrack();
+                return true;
             }
         }
         return super.dispatchKeyEvent(event);
