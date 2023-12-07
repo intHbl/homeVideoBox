@@ -3,8 +3,8 @@
     android:shape="oval">
 <!--    进度条圆点按压状态颜色-->
 <!--    <solid android:color="@color/color_03DAC5" />-->
-    <solid android:color="@color/color_1890FF" />
+    <solid android:color="#3F51B5" />
     <size
-        android:width="@dimen/vs_10"
-        android:height="@dimen/vs_10" />
+        android:width="@dimen/vs_8"
+        android:height="@dimen/vs_8" />
 </shape>

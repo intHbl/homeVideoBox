@@ -415,6 +415,7 @@ public class LivePlayActivity extends BaseActivity {
         });
     }
 
+    private  boolean hasGotChannelGpg=false;
     //显示底部EPG
     private void showBottomEpg() {
         if (isSHIYI || channel_Name==null || channel_Name.getChannelName() == null){
@@ -424,7 +425,8 @@ public class LivePlayActivity extends BaseActivity {
 
         tip_chname.setText(channel_Name.getChannelName());
         tv_channelnum.setText("" + channel_Name.getChannelNum());
-        tip_epg1.setText("无信息");
+        tip_epg1.setText(channel_Name.getChannelName()); //默认显示频道名
+
         tip_epg2.setText("");
         tv_current_program_name.setText("");
         tv_next_program_name.setText("");
@@ -442,6 +444,7 @@ public class LivePlayActivity extends BaseActivity {
                 while (size >= 0) {
                     if (new Date().compareTo(((Epginfo) arrayList.get(size)).startdateTime) >= 0) {
                         tip_epg1.setText(((Epginfo) arrayList.get(size)).start + "--" + ((Epginfo) arrayList.get(size)).end);
+                        hasGotChannelGpg=true;
                         tv_current_program_name.setText(((Epginfo) arrayList.get(size)).title);
                         if (size != arrayList.size() - 1) {
                             tip_epg2.setText(((Epginfo) arrayList.get(size + 1)).start + "--" + ((Epginfo) arrayList.get(size)).end);
@@ -497,7 +500,8 @@ public class LivePlayActivity extends BaseActivity {
         // 延迟5秒后执行隐藏操作
         handler.postDelayed(() -> ll_right_top_huikan.setVisibility(View.GONE), 5000);
         int delay=6000;
-        if(tip_epg1.getText().equals("无信息")){
+//        if(tip_epg1.getText().equals("无信息")){
+        if(hasGotChannelGpg){
             delay=1500;
         }
 
@@ -735,8 +739,11 @@ public class LivePlayActivity extends BaseActivity {
             currentLiveChannelItem.setinclude_back(false);
         }
 
-        if(!changeSource){
-            //换频道 才显示.
+        if(changeSource) {
+            // 仅换源
+        }else{
+            //换频道
+            hasGotChannelGpg=false;
 
             // XXTODO 先不显示 只show, 内部 不getEpg(..)
             showBottomEpg();

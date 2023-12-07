@@ -54,6 +54,7 @@ import com.github.tvbox.osc.player.IjkMediaPlayer;
 import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.player.TrackInfo;
 import com.github.tvbox.osc.player.TrackInfoBean;
+import com.github.tvbox.osc.player.controller.SimpleVodController;
 import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
@@ -117,7 +118,7 @@ public class PlayFragment extends BaseLazyFragment {
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
     private ProgressBar mPlayLoading;
-    private VodController mController;
+    private SimpleVodController mController;
     private SourceViewModel sourceViewModel;
     private Handler mHandler;
 
@@ -187,7 +188,7 @@ public class PlayFragment extends BaseLazyFragment {
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
-        mController = new VodController(requireContext());
+        mController = new SimpleVodController(requireContext());
         mController.setCanChangePosition(true);
         mController.setEnableInNormal(true);
         mController.setGestureEnabled(true);
@@ -203,7 +204,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
         };
         mVideoView.setProgressManager(progressManager);
-        mController.setListener(new VodController.VodControlListener() {
+        mController.setListener(new SimpleVodController.VodControlListener() {
             @Override
             public void playNext(boolean rmProgress) {
                 String preProgressKey = progressKey;
@@ -935,6 +936,8 @@ public class PlayFragment extends BaseLazyFragment {
     }
 
     void autoRetryFromLoadFoundVideoUrls() {
+        // 自动 换源 在这里实现!!!
+
         String videoUrl = loadFoundVideoUrls.poll();
         HashMap<String,String> header = loadFoundVideoUrlsHeader.get(videoUrl);
         playUrl(videoUrl, header);

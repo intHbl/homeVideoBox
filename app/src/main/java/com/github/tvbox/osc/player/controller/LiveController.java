@@ -12,11 +12,13 @@ import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import xyz.doikki.videoplayer.player.VideoView;
+
 /**
  * 直播控制器
  */
 
-public class LiveController extends BaseController {
+public class LiveController extends BaseLiveController {
     protected ProgressBar mLoading;
     private int minFlingDistance = 100;             //最小识别距离
     private int minFlingVelocity = 10;              //最小识别速度

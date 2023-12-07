@@ -54,6 +54,7 @@ import com.github.tvbox.osc.player.IjkMediaPlayer;
 import com.github.tvbox.osc.player.MyVideoView;
 import com.github.tvbox.osc.player.TrackInfo;
 import com.github.tvbox.osc.player.TrackInfoBean;
+import com.github.tvbox.osc.player.controller.SimpleVodController;
 import com.github.tvbox.osc.player.controller.VodController;
 import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.ui.adapter.SelectDialogAdapter;
@@ -115,7 +116,7 @@ public class PlayActivity extends BaseActivity {
     private TextView mPlayLoadTip;
     private ImageView mPlayLoadErr;
     private ProgressBar mPlayLoading;
-    private VodController mController;
+    private SimpleVodController mController;
     private SourceViewModel sourceViewModel;
     private Handler mHandler;
 
@@ -167,7 +168,7 @@ public class PlayActivity extends BaseActivity {
         mPlayLoadTip = findViewById(R.id.play_load_tip);
         mPlayLoading = findViewById(R.id.play_loading);
         mPlayLoadErr = findViewById(R.id.play_load_error);
-        mController = new VodController(this);
+        mController = new SimpleVodController(this);
         mController.setCanChangePosition(true);
         mController.setEnableInNormal(true);
         mController.setGestureEnabled(true);
@@ -184,7 +185,13 @@ public class PlayActivity extends BaseActivity {
             }
         };
         mVideoView.setProgressManager(progressManager);
-        mController.setListener(new VodController.VodControlListener() {
+        mController.setListener(new SimpleVodController.VodControlListener() {
+            public void playNextSource(){
+                //TODO
+//                PlayActivity.
+
+            }
+
             @Override
             public void playNext(boolean rmProgress) {
                 String preProgressKey = progressKey;

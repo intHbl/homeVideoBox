@@ -535,7 +535,7 @@ public class HomeActivity extends BaseActivity {
         finish();
         super.onBackPressed();
     }
-    private int mExitTimeCount=0;
+    private long mExitTimeCount=0;
 
     private void exit() {
         long t=System.currentTimeMillis() - mExitTime;
@@ -546,8 +546,8 @@ public class HomeActivity extends BaseActivity {
                     // do nothing
                 }else if(mExitTimeCount==10) {
                     mExitTime=System.currentTimeMillis();
-                    Toast.makeText(mContext, "再按一次返回键🔙退出应用", Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(mContext, "再按两次🔙键 退出应用", Toast.LENGTH_SHORT).show();
+                }else if(mExitTimeCount>=12){
                     exit_app();
                 }
             } else {

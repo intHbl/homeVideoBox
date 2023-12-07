@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -147,7 +148,8 @@ public class ApiConfig {
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
-        if (isLauncherMode()) {
+        if (isLauncherMode())
+        {
             // String apiUrl = Hawk.get(HawkConfig.API_URL, "http://server.lan:9966/tvbox/home.json");
 
 //        String apiUrl0="https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json";
@@ -176,19 +178,21 @@ public class ApiConfig {
             } else {
                 useCache = false;
             }
-//        loadConfig_(useCache,callback,activity,apiUrls.get(tryCount%apiUrls.size()));
-//        tryCount++;
+        loadConfig_(useCache,callback,activity,apiUrls.get(tryCount%apiUrls.size()));
+        tryCount++;
 
             // debug
-            useCache = true;
-            String apiUrl = "https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json";
-            loadConfig_(useCache, callback, activity, apiUrl);
-        }else{
-            // 常规mode
-            useCache = true;
-            String apiUrl = "https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json";
-            loadConfig_(useCache, callback, activity, apiUrl);
+//            useCache = true;
+//            String apiUrl = "https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json";
+//            loadConfig_(useCache, callback, activity, apiUrl);
         }
+//        else
+//        {
+//            // 常规mode
+//            useCache = true;
+//            String apiUrl = "https://agit.ai/Yoursmile7/TVBox/raw/branch/master/XC.json";
+//            loadConfig_(useCache, callback, activity, apiUrl);
+//        }
 
     }
 
@@ -862,4 +866,17 @@ public class ApiConfig {
         }
         return path;
     }
+
+
+    public String mkFenCiUrl(String wd){
+        // 分词
+        // // OkGo.<String>get(url + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
+        if(isLauncherMode()){
+          return "http://127.0.0.1:19999/";
+        };
+        String url="http://api.pullword.com/get.php?source=";
+        url=url + URLEncoder.encode(wd) + "&param1=0&param2=0&json=1";
+        return url;
+    }
 }
+

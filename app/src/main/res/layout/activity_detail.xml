@@ -252,6 +252,7 @@
                 android:textSize="@dimen/ts_24" />
         </LinearLayout>
 
+<!--       flag|分组| vod_play_from -->
         <com.owen.tvrecyclerview.widget.TvRecyclerView
             android:id="@+id/mGridViewFlag"
             android:layout_width="match_parent"
@@ -264,6 +265,7 @@
             app:tv_horizontalSpacingWithMargins="@dimen/vs_10"
             app:tv_selectedItemIsCentered="true" />
 
+<!--        剧集 集数很多时. 分组, 例如 (1-30集) 30-60 -->
         <com.owen.tvrecyclerview.widget.TvRecyclerView
             android:id="@+id/mSeriesGroupView"
             android:layout_width="match_parent"
@@ -275,7 +277,7 @@
             android:clipToPadding="false"
             app:tv_horizontalSpacingWithMargins="@dimen/vs_10"
             app:tv_selectedItemIsCentered="true" />
-
+<!--        具体的播放列表 名字  -->
         <com.owen.tvrecyclerview.widget.TvRecyclerView
             android:id="@+id/mGridView"
             android:layout_width="match_parent"

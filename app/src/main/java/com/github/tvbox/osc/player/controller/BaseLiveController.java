@@ -27,7 +27,7 @@ import xyz.doikki.videoplayer.controller.IGestureComponent;
 import xyz.doikki.videoplayer.player.VideoView;
 import xyz.doikki.videoplayer.util.PlayerUtils;
 
-public abstract class BaseController extends BaseVideoController implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnTouchListener {
+public abstract class BaseLiveController extends BaseVideoController implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener, View.OnTouchListener {
     private GestureDetector mGestureDetector;
     private AudioManager mAudioManager;
     private boolean mIsGestureEnabled = true;
@@ -54,7 +54,7 @@ public abstract class BaseController extends BaseVideoController implements Gest
     private boolean mIsDoubleTapTogglePlayEnabled = true;
 
 
-    public BaseController(@NonNull Context context) {
+    public BaseLiveController(@NonNull Context context) {
         super(context);
         mHandler = new Handler(new Handler.Callback() {
             @Override
@@ -82,11 +82,11 @@ public abstract class BaseController extends BaseVideoController implements Gest
         });
     }
 
-    public BaseController(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseLiveController(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BaseController(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public BaseLiveController(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -116,32 +116,32 @@ public abstract class BaseController extends BaseVideoController implements Gest
     @Override
     protected void onPlayStateChanged(int playState) {
         super.onPlayStateChanged(playState);
-//        switch (playState) {
-//            case VideoView.STATE_IDLE:
-//                mLoading.setVisibility(GONE);
-//                break;
-//            case VideoView.STATE_PLAYING:
-//                mPauseRoot.setVisibility(GONE);
-//                mLoading.setVisibility(GONE);
-//                break;
-//            case VideoView.STATE_PAUSED:
-//                mPauseRoot.setVisibility(VISIBLE);
-//                mLoading.setVisibility(GONE);
-//                break;
-//            case VideoView.STATE_PREPARED:
-//            case VideoView.STATE_ERROR:
-//            case VideoView.STATE_BUFFERED:
-//                mLoading.setVisibility(GONE);
-//                break;
-//            case VideoView.STATE_PREPARING:
-//            case VideoView.STATE_BUFFERING:
-//                mLoading.setVisibility(VISIBLE);
-//                break;
-//            case VideoView.STATE_PLAYBACK_COMPLETED:
-//                mLoading.setVisibility(GONE);
-//                mPauseRoot.setVisibility(GONE);
-//                break;
-//        }
+        switch (playState) {
+            case VideoView.STATE_IDLE:
+                mLoading.setVisibility(GONE);
+                break;
+            case VideoView.STATE_PLAYING:
+                mPauseRoot.setVisibility(GONE);
+                mLoading.setVisibility(GONE);
+                break;
+            case VideoView.STATE_PAUSED:
+                mPauseRoot.setVisibility(VISIBLE);
+                mLoading.setVisibility(GONE);
+                break;
+            case VideoView.STATE_PREPARED:
+            case VideoView.STATE_ERROR:
+            case VideoView.STATE_BUFFERED:
+                mLoading.setVisibility(GONE);
+                break;
+            case VideoView.STATE_PREPARING:
+            case VideoView.STATE_BUFFERING:
+                mLoading.setVisibility(VISIBLE);
+                break;
+            case VideoView.STATE_PLAYBACK_COMPLETED:
+                mLoading.setVisibility(GONE);
+                mPauseRoot.setVisibility(GONE);
+                break;
+        }
     }
 
     /**

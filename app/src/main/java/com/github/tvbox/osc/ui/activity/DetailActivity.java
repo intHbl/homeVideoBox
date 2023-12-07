@@ -151,6 +151,9 @@ public class DetailActivity extends BaseActivity {
         initData();
     }
 
+    private void debug__(String s){
+        Toast.makeText(DetailActivity.this,s,Toast.LENGTH_SHORT).show();
+    }
     private void initView() {
         llLayout = findViewById(R.id.llLayout);
         llPlayerPlace = findViewById(R.id.previewPlayerPlace);
@@ -360,6 +363,8 @@ public class DetailActivity extends BaseActivity {
             }
         });
         seriesAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+
+            // GG TODO : 播放参考这里.
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 FastClickCheckUtil.check(view);
@@ -394,11 +399,13 @@ public class DetailActivity extends BaseActivity {
             }
         });
 
+        // 这个 应该 没有用到 !!
         mSeriesGroupView.setOnItemListener(new TvRecyclerView.OnItemListener() {
             @Override
             public void onItemPreSelected(TvRecyclerView parent, View itemView, int position) {
                 TextView txtView = itemView.findViewById(R.id.tvSeriesGroup);
-                txtView.setTextColor(Color.WHITE);
+//                txtView.setTextColor(Color.WHITE);
+                txtView.setTextColor(Color.LTGRAY);
 //                currentSeriesGroupView = null;
             }
 
@@ -466,6 +473,7 @@ public class DetailActivity extends BaseActivity {
 //            bundle.putSerializable("VodInfo", vodInfo);
             App.getInstance().setVodInfo(vodInfo);
             if (showPreview) {
+                // 预览
                 if (previewVodInfo == null) {
                     try {
                         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -489,6 +497,7 @@ public class DetailActivity extends BaseActivity {
                 }
                 playFragment.setData(bundle);
             } else {
+                // 播放页.
                 jumpActivity(PlayActivity.class, bundle);
             }
         }
@@ -796,6 +805,8 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void startQuickSearch() {
+        if(ApiConfig.get().isLauncherMode()) return;
+
         initCheckedSourcesForSearch();
         if (hadQuickStart)
             return;
@@ -805,8 +816,10 @@ public class DetailActivity extends BaseActivity {
         searchTitle = mVideo.name;
         quickSearchData.clear();
         quickSearchWord.addAll(SearchHelper.splitWords(searchTitle));
-        // 分词  http://api.pullword.com/get.php?source=
-        OkGo.<String>get("http://127.0.0.1?source=" + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
+
+        // 分词
+//        OkGo.<String>get(url + URLEncoder.encode(searchTitle) + "&param1=0&param2=0&json=1")
+        OkGo.<String>get(ApiConfig.get().mkFenCiUrl(searchTitle))
                 .tag("fenci")
                 .execute(new AbsCallback<String>() {
                     @Override
