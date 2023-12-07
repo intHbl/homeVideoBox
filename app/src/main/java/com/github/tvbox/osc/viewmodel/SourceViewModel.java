@@ -131,20 +131,23 @@ public class SourceViewModel extends ViewModel {
                             return sp.homeContent(true);
                         }
                     });
-                    String sortJson = null;
+                    String str_sortJson = null;
                     try {
-                        sortJson = future.get(15, TimeUnit.SECONDS);
+                        str_sortJson = future.get(15, TimeUnit.SECONDS);
                     } catch (TimeoutException e) {
                         e.printStackTrace();
                         future.cancel(true);
                     } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     } finally {
-                        if (sortJson != null) {
-                            AbsSortXml sortXml = sortJson(sortResult, sortJson);
-                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
-                                AbsXml absXml = json(null, sortJson, sourceBean.getKey());
+                        if (str_sortJson != null) {
+                            AbsSortXml sortXml = sortJson(sortResult, str_sortJson);
+                            // YYTODO: 站点推荐
+//                            if (sortXml != null) && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                            if (sortXml != null){
+                                AbsXml absXml = json(null, str_sortJson, sourceBean.getKey());
                                 if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
+                                    // 把 站点推荐 拿出来 存进去
                                     sortXml.videoList = absXml.movie.videoList;
                                     sortResult.postValue(sortXml);
                                 } else {
@@ -156,6 +159,19 @@ public class SourceViewModel extends ViewModel {
                                         }
                                     });
                                 }
+//                            } else if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 2) {
+//                                //YYTODO : 关键在这!!!
+//                                //  需要造一个 json
+//                                AbsXml absXml = json(null, str_sortJson, sourceBean.getKey());
+//                                if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
+//                                    sortXml.videoList = absXml.movie.videoList;
+//                                    sortResult.postValue(sortXml);
+//                                }
+//
+//                                // 需要把这个 推荐 放进组里.
+//                                //  type_id": "____tuijian____", // 分类id
+//                                //  "type_name": "推荐" // 分类名
+//                                sortResult.postValue(sortXml);
                             } else {
                                 sortResult.postValue(sortXml);
                             }
@@ -194,7 +210,10 @@ public class SourceViewModel extends ViewModel {
                                 String json = response.body();
                                 sortXml = sortJson(sortResult, json);
                             }
-                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1 && sortXml.list != null && sortXml.list.videoList != null && sortXml.list.videoList.size() > 0) {
+
+                            //YYTODO
+//                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1 && sortXml.list != null && sortXml.list.videoList != null && sortXml.list.videoList.size() > 0) {
+                            if (sortXml != null && sortXml.list != null && sortXml.list.videoList != null && sortXml.list.videoList.size() > 0) {
                                 ArrayList<String> ids = new ArrayList<>();
                                 for (Movie.Video vod : sortXml.list.videoList) {
                                     ids.add(vod.id);
@@ -240,7 +259,10 @@ public class SourceViewModel extends ViewModel {
                                 String sortJson  = response.body();
                                 if (sortJson != null) {
                                     AbsSortXml sortXml = sortJson(sortResult, sortJson);
-                                    if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+
+                                    //YYTODO
+//                                    if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                                    if (sortXml != null) {
                                         AbsXml absXml = json(null, sortJson, sourceBean.getKey());
                                         if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
                                             sortXml.videoList = absXml.movie.videoList;
@@ -282,7 +304,9 @@ public class SourceViewModel extends ViewModel {
                             assert response.body() != null;
                             String sortJson  = response.body().string();
                             AbsSortXml sortXml = sortJson(sortResult, sortJson);
-                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                            //YYYTODO
+//                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                            if (sortXml != null) {
                                 AbsXml absXml = json(null, sortJson, sourceBean.getKey());
                                 if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
                                     sortXml.videoList = absXml.movie.videoList;
@@ -310,14 +334,20 @@ public class SourceViewModel extends ViewModel {
                 @Override
                 public void run() {
                     try {
-                        Spider sp = ApiConfig.get().getCSP(homeSourceBean);
-                        json(listResult, sp.categoryContent(sortData.id, page + "", true, sortData.filterSelect), homeSourceBean.getKey());
+                        if(sortData.id=="____tuijian____"){
+                            // YYYTODO : post
+                            listResult.postValue(null);
+                        }else {
+                            Spider sp = ApiConfig.get().getCSP(homeSourceBean);
+                            json(listResult, sp.categoryContent(sortData.id, page + "", true, sortData.filterSelect), homeSourceBean.getKey());
+                        }
                     } catch (Throwable th) {
                         th.printStackTrace();
                     }
                 }
             });
-        } else if (type == 0 || type == 1) {
+        }
+        else if (type == 0 || type == 1) {
             OkGo.<String>get(homeSourceBean.getApi())
                     .tag(homeSourceBean.getApi())
                     .params("ac", type == 0 ? "videolist" : "detail")

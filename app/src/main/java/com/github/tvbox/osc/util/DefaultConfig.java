@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class DefaultConfig {
 
-    public static List<MovieSort.SortData> adjustSort(String sourceKey, List<MovieSort.SortData> list, boolean withMy) {
+    public static List<MovieSort.SortData> adjustSort(String sourceKey, List<MovieSort.SortData> list, boolean withMy, boolean withTuijian) {
         List<MovieSort.SortData> data = new ArrayList<>();
         if (sourceKey != null) {
             SourceBean sb = ApiConfig.get().getSource(sourceKey);
@@ -48,8 +48,14 @@ public class DefaultConfig {
                 }
             }
         }
+
+        if(withTuijian)
+            // 推荐
+            data.add(0, new MovieSort.SortData("____tuijian____", "✨推荐"));
+
         if (withMy)
-            data.add(0, new MovieSort.SortData("my0", "主页"));
+            data.add(0, new MovieSort.SortData("____my0____", "🎪"));
+
         Collections.sort(data);
         return data;
     }

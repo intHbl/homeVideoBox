@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.github.tvbox.osc.R;
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.base.BaseLazyFragment;
+import com.github.tvbox.osc.bean.AbsJson;
 import com.github.tvbox.osc.bean.AbsXml;
 import com.github.tvbox.osc.bean.Movie;
 import com.github.tvbox.osc.bean.MovieSort;
@@ -25,10 +26,16 @@ import com.github.tvbox.osc.ui.tv.widget.LoadMoreView;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7GridLayoutManager;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -52,6 +59,12 @@ public class GridFragment extends BaseLazyFragment {
     private boolean isTop = true;
     private View focusedView = null;
     private String default_sourceKey = null;
+
+    private boolean needLongClick;
+
+    private List<Movie.Video> videoList;
+
+
     private class GridInfo{
         public String sortID="";
         public TvRecyclerView mGridView;
@@ -63,12 +76,24 @@ public class GridFragment extends BaseLazyFragment {
     }
     Stack<GridInfo> mGrids = new Stack<GridInfo>(); //ui栈
 
-    public static GridFragment newInstance(MovieSort.SortData sortData) {
-        return new GridFragment().setArguments(sortData);
+    public static GridFragment newInstance(MovieSort.SortData sortData,boolean needLongClick) {
+        return new GridFragment().setArguments(sortData,needLongClick);
     }
 
-    public GridFragment setArguments(MovieSort.SortData sortData) {
+    public static GridFragment newInstance(MovieSort.SortData sortData,List<Movie.Video> videoList) {
+        return new GridFragment().setArguments(sortData,videoList);
+    }
+
+    public GridFragment setArguments(MovieSort.SortData sortData, boolean needLongClick) {
         this.sortData = sortData;
+        this.needLongClick=needLongClick;
+        return this;
+    }
+
+    public GridFragment setArguments(MovieSort.SortData sortData, List<Movie.Video> videoList) {
+        this.sortData = sortData;
+        this.needLongClick=true;
+        this.videoList=videoList;
         return this;
     }
 
@@ -229,15 +254,17 @@ public class GridFragment extends BaseLazyFragment {
         gridAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                // FastClickCheckUtil.check(view);
-                // Movie.Video video = gridAdapter.getData().get(position);
-                // if (video != null) {
-                //     Bundle bundle = new Bundle();
-                //     bundle.putString("id", video.id);
-                //     bundle.putString("sourceKey", video.sourceKey);
-                //     bundle.putString("title", video.name);
-                //     jumpActivity(FastSearchActivity.class, bundle);
-                // }
+                if(needLongClick) {
+                    FastClickCheckUtil.check(view);
+                    Movie.Video video = gridAdapter.getData().get(position);
+                    if (video != null) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", video.id);
+                        bundle.putString("sourceKey", video.sourceKey);
+                        bundle.putString("title", video.name);
+                        jumpActivity(FastSearchActivity.class, bundle);
+                    }
+                }
                 return true;
             }
         });
@@ -251,6 +278,43 @@ public class GridFragment extends BaseLazyFragment {
         sourceViewModel.listResult.observe(this, new Observer<AbsXml>() {
             @Override
             public void onChanged(AbsXml absXml) {
+                if(sortData.id=="____tuijian____" && videoList!=null && videoList.size()>0){
+                    // YYYTODO : after post null
+                    //     gen AbsXml
+//                    "page": 1, // 当前页
+//                    "limit": 60, // 每页几条数据
+//                    "pagecount": 10, // 总共几页
+//                    "total": 120, // 总共多少调数据
+//                    "list": []
+
+                    absXml=new AbsXml();
+                    int pagesize=10;
+                    int start=(page-1)*pagesize;
+                    int end=page*pagesize;
+                    if(start>=videoList.size()){
+                        absXml=null;
+                    }else{
+                        if(end>videoList.size()){
+                            end=videoList.size();
+                        }
+                        Movie mov=new Movie();
+                        mov.page=page;
+                        mov.pagesize=pagesize;
+                        mov.pagecount=videoList.size()/pagesize+1;
+                        mov.recordcount=videoList.size();
+
+                        mov.videoList=new ArrayList<>();
+                        for(int i=start;i<end;++i){
+                            mov.videoList.add(videoList.get(i));
+                        }
+//                        videoList. subList(start,end);
+
+                        absXml.movie=mov;
+                        absXml.msg="test msg";
+//                        Toast.makeText(getContext(), "tuijian end", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
 //                if(mGridView != null) mGridView.requestFocus();
                 if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
                     if (page == 1) {
@@ -293,6 +357,7 @@ public class GridFragment extends BaseLazyFragment {
         isLoad = false;
         scrollTop();
         toggleFilterColor();
+//        default_sourceKey=TODO;
         sourceViewModel.getList(sortData, page, default_sourceKey);
     }
 

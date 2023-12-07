@@ -34,6 +34,7 @@ import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.base.BaseLazyFragment;
 import com.github.tvbox.osc.bean.AbsSortXml;
+import com.github.tvbox.osc.bean.Movie;
 import com.github.tvbox.osc.bean.MovieSort;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
@@ -268,10 +269,14 @@ public class HomeActivity extends BaseActivity {
             @Override
             public void onChanged(AbsSortXml absXml) {
                 showSuccess();
+                boolean withTuijian=false;
+                if (absXml != null && absXml.videoList != null && absXml.videoList.size() > 0) {
+                    withTuijian=true;
+                }
                 if (absXml != null && absXml.classes != null && absXml.classes.sortList != null) {
-                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true));
+                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), absXml.classes.sortList, true,withTuijian));
                 } else {
-                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true));
+                    sortAdapter.setNewData(DefaultConfig.adjustSort(ApiConfig.get().getHomeSourceBean().getKey(), new ArrayList<>(), true,withTuijian));
                 }
                 initViewPager(absXml);
             }
@@ -310,6 +315,7 @@ public class HomeActivity extends BaseActivity {
                             public void run() {
                                 // if (!useCacheConfig)
                                 //     Toast.makeText(HomeActivity.this, "自定义jar加载成功", Toast.LENGTH_SHORT).show();
+//                                 Toast.makeText(HomeActivity.this, "✅", Toast.LENGTH_SHORT).show();
                                 initData();
                             }
                         }, 50);
@@ -441,18 +447,33 @@ public class HomeActivity extends BaseActivity {
         }, this);
     }
 
+    private List<Movie.Video> tuijanVideos=null;
+
     private void initViewPager(AbsSortXml absXml) {
         if (sortAdapter.getData().size() > 0) {
             for (MovieSort.SortData data : sortAdapter.getData()) {
-                if (data.id.equals("my0")) {
+                if (data.id.equals("____my0____")) {
                     if (Hawk.get(HawkConfig.HOME_REC, 0) == 1 && absXml != null && absXml.videoList != null && absXml.videoList.size() > 0) {
+//                    if (absXml != null && absXml.videoList != null && absXml.videoList.size() > 0) {
                         // 站点推荐
                         fragments.add(UserFragment.newInstance(absXml.videoList));
                     } else {
+                        if(absXml != null && absXml.videoList != null && absXml.videoList.size() > 0){
+                            tuijanVideos=new ArrayList<>();
+                            for(Movie.Video v: absXml.videoList){
+                                //YYTODO : 复制出来, 因为不知道 这个 在别处有没有更改...
+                                tuijanVideos.add(v);
+                            }
+                        }
                         fragments.add(UserFragment.newInstance(null));
                     }
-                } else {
-                    fragments.add(GridFragment.newInstance(data));
+                } else if (data.id.equals("____tuijian____")) {
+                    //YYYTODO : 添加 分组view {id:, name:}
+                    fragments.add(GridFragment.newInstance(data,tuijanVideos));
+                }
+                else
+                {
+                    fragments.add(GridFragment.newInstance(data,tuijanVideos!=null));
                 }
             }
             pageAdapter = new HomePageAdapter(getSupportFragmentManager(), fragments);
@@ -506,26 +527,43 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    private void exit_app(){
+        //这一段借鉴来自 q群老哥 IDCardWeb
+        EventBus.getDefault().unregister(this);
+        AppManager.getInstance().appExit(0);
+        ControlManager.get().stopServer();
+        finish();
+        super.onBackPressed();
+    }
     private int mExitTimeCount=0;
-    private void exit() {
-        if (System.currentTimeMillis() - mExitTime < 3000) {
-            if(mExitTimeCount<5) {
 
-            }else if(mExitTimeCount==5) {
-                Toast.makeText(mContext, "再按一次返回键🔙退出应用", Toast.LENGTH_SHORT).show();
-            }else{
-                //这一段借鉴来自 q群老哥 IDCardWeb
-                EventBus.getDefault().unregister(this);
-                AppManager.getInstance().appExit(0);
-                ControlManager.get().stopServer();
-                finish();
-                super.onBackPressed();
+    private void exit() {
+        long t=System.currentTimeMillis() - mExitTime;
+        if(ApiConfig.get().isLauncherMode()){
+            if (System.currentTimeMillis() - mExitTime < 5000) {
+                mExitTimeCount++;
+                if(mExitTimeCount<10) {
+                    // do nothing
+                }else if(mExitTimeCount==10) {
+                    mExitTime=System.currentTimeMillis();
+                    Toast.makeText(mContext, "再按一次返回键🔙退出应用", Toast.LENGTH_SHORT).show();
+                }else{
+                    exit_app();
+                }
+            } else {
+                mExitTimeCount=0;
+                mExitTime = System.currentTimeMillis();
             }
-            mExitTimeCount++;
-        } else {
-            mExitTimeCount=0;
-            mExitTime = System.currentTimeMillis();
+        }else{
+            if(t<1000){
+                // 1秒内 按两次 返回 = 退出;
+                exit_app();
+            }else{
+                Toast.makeText(mContext, "再按一次 🔙 退出 ", Toast.LENGTH_SHORT).show();
+                mExitTime=System.currentTimeMillis();
+            }
         }
+
     }
 
     @Override
@@ -670,22 +708,27 @@ public class HomeActivity extends BaseActivity {
     private int mMenuTimeCount=0;
     private long mMenuTime=0;
     private void showMenu() {
-        if (System.currentTimeMillis() - mMenuTime < 3000) {
-            if(mMenuTimeCount<5) {
+        if(ApiConfig.get().isLauncherMode()) {
+            if (System.currentTimeMillis() - mMenuTime < 3000) {
+                if (mMenuTimeCount < 5) {
 
-            }else if(mMenuTimeCount==5) {
+                } else if (mMenuTimeCount == 5) {
 //                Toast.makeText(mContext, "menu", Toast.LENGTH_SHORT).show();
-                mMenuTime = System.currentTimeMillis();
-            }else if(mMenuTimeCount>10){
-                Toast.makeText(mContext, "open settings menu", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                    mMenuTime = System.currentTimeMillis();
+                } else if (mMenuTimeCount > 10) {
+                    Toast.makeText(mContext, "👍 open settings menu", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
 //                openOptionsMenu();
 //                startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                }
+                mMenuTimeCount++;
+            } else {
+                mMenuTimeCount = 0;
+                mMenuTime = System.currentTimeMillis();
             }
-            mMenuTimeCount++;
-        } else {
-            mMenuTimeCount=0;
-            mMenuTime = System.currentTimeMillis();
+        }else{
+            // 常规 mode
+            showSiteSwitch();
         }
     }
 
