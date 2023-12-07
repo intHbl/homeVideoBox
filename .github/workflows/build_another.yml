@@ -1,4 +1,4 @@
-name: Main Self build
+name: Main  build another
 
 on:
   push:
@@ -93,6 +93,6 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ env.commit }}
         with:
-          name: homeVideoBox-Release-${{ env.commit }}
+          name: homeVideoBox-another-${{ env.commit }}
           path: TVBoxOSC/apk/*
 
