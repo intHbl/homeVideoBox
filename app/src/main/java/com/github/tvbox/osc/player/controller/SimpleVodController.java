@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -159,6 +160,7 @@ public class SimpleVodController extends BaseController {
     int myHandleSeconds = 10000;//闲置多少毫秒秒关闭底栏  默认6秒
 
     int videoPlayState = 0;
+    private TextView video_name_large;
 
 
     private Runnable clockTick = new Runnable() {
@@ -203,6 +205,8 @@ public class SimpleVodController extends BaseController {
 //        mTotalTime = findViewById(R.id.total_time);
 //        mPlayTitle = findViewById(R.id.tv_info_name);
         mPlayTitle1 = findViewById(R.id.tv_info_name1);
+        video_name_large=findViewById(R.id.video_name_large);
+
         mPlayLoadNetSpeedRightTop = findViewById(R.id.tv_play_load_net_speed_right_top);
 //        mSeekBar = findViewById(R.id.seekBar);
 
@@ -750,6 +754,7 @@ public class SimpleVodController extends BaseController {
     public void setTitle(String playTitleInfo) {
 //        mPlayTitle.setText(playTitleInfo);
         mPlayTitle1.setText(playTitleInfo);
+        video_name_large.setText(playTitleInfo);
     }
 
     public void resetSpeed() {
@@ -882,6 +887,8 @@ public class SimpleVodController extends BaseController {
 
     }
 
+
+
     @Override
     protected void onPlayStateChanged(int playState) {
         super.onPlayStateChanged(playState);
@@ -894,11 +901,13 @@ public class SimpleVodController extends BaseController {
                 startProgress();
                 mVideoSize.setVisibility(GONE);
                 _on_pause(false);
+                video_name_large.setVisibility(GONE);
 
                 break;
             case VideoView.STATE_PAUSED:
                 mVideoSize.setVisibility(VISIBLE);
                 _on_pause(true);
+                video_name_large.setVisibility(VISIBLE);
 
                 break;
             case VideoView.STATE_ERROR:

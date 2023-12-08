@@ -957,8 +957,12 @@ public class PlayFragment extends BaseLazyFragment {
 //        String playTitleInfo = mVodInfo.name + " " + vs.name;
         String playTitleInfo = mVodInfo.name;
         if(mVodInfo.seriesMap.get(mVodInfo.playFlag).size()>1){
-            playTitleInfo += " - " + vs.name;
+            if(vs.name.length()>4)
+                playTitleInfo=vs.name;
+            else
+                playTitleInfo += " - " + vs.name;
         }
+
 
         mController.setTitle(playTitleInfo);
 
