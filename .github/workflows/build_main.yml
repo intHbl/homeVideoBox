@@ -95,3 +95,11 @@ jobs:
           name: homeVideoBox-Release-${{ env.commit }}
           path: TVBoxOSC/apk/*
 
+      - name: Upload firmware to WeTransfer
+        id: wetransfer
+        if: ${{ env.commit }}
+        run: |
+          curl -fsSL git.io/file-transfer | sh
+          ./transfer wet -s -p 16 --no-progress TVBoxOSC/apk 2>&1 | tee wetransfer.log
+          echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+          echo "url=$(cat wetransfer.log | grep https | cut -f3 -d" ")" >> $GITHUB_OUTPUT
