@@ -76,5 +76,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ env.commit }}
         with:
-          name: homeVideoBoxMain-Release-${{ env.commit }}
+          name: TVBoxOS-q215613905-daily-${{ env.commit }}
           path: TVBoxOSC/apk/*
