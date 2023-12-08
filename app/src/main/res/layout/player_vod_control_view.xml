@@ -551,7 +551,7 @@
             android:layout_height="match_parent"
             android:tag="vod_control_pause"
             android:visibility="gone"
-            tools:visibility="visible">
+            >
 
             <!--            <LinearLayout-->
             <!--                android:layout_width="wrap_content"-->

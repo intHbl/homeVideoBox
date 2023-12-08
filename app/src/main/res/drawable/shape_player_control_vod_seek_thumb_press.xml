@@ -5,5 +5,5 @@
     <!--    <solid android:color="@color/color_03DAC5" />-->
     <size
         android:width="@dimen/vs_3"
-        android:height="@dimen/vs_6" />
+        android:height="@dimen/vs_4" />
 </shape>
